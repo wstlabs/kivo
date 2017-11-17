@@ -1,16 +1,15 @@
 import os
-from etlapp.logging import log
-from etlapp.util.source import splitpath, tablename
-from etlapp.shell import dopsql
-from etlapp.decorators import timedsingle
-import etlapp.source
-import etlapp.stage
-import etlapp
+from ..logging import log
+from ..util.source import splitpath, tablename
+from ..shell import dopsql
+from ..decorators import timedsingle
+from .. import source
+from .. import stage
 
 @timedsingle
 def check_source_named(prefix,name):
     log.debug("source = '%s'.'%s'" % (prefix,name))
-    infile = etlapp.stage.latest(prefix,name)
+    infile = stage.latest(prefix,name)
     return infile is not None
 
 
@@ -26,7 +25,7 @@ def exec_any(handler,srcarg,strict=True):
         return exec_multi(handler,prefix,[name],strict)
     else:
         prefix = srcarg
-        names = etlapp.source.select(prefix,{'active':True})
+        names = source.select(prefix,{'active':True})
         return exec_multi(handler,prefix,names,strict)
 
 def exec_multi(handler,prefix,names,strict=True):

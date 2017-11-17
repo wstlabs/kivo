@@ -1,4 +1,4 @@
-from etlapp.util.csvarg import make_csv_args
+from ..util.csvarg import make_csv_args
 
 """
 We use the '(select % from ...)' construct so that the relation we pull

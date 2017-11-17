@@ -1,6 +1,6 @@
 import os
 from collections import OrderedDict
-from etlapp.logging import log
+from .logging import log
 
 STAGE = 'stage'
 PHASERANK = OrderedDict([('special',4),('xtracted',3),('unpack',2),('incoming',1),('proto',0)])

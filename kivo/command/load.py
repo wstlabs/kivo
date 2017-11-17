@@ -1,12 +1,11 @@
 import os
-from etlapp.logging import log
-from etlapp.util.source import splitpath, tablename
-from etlapp.util.load import make_copy_command
-from etlapp.shell import dopsql
-from etlapp.decorators import timedsingle
-import etlapp.source
-import etlapp.stage
-import etlapp
+from ..logging import log
+from ..util.source import splitpath, tablename
+from ..util.load import make_copy_command
+from ..shell import dopsql
+from ..decorators import timedsingle
+from .. import source
+from .. import stage
 
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
@@ -22,7 +21,7 @@ def load_any(srcarg,strict=True):
         return load_multi(prefix,[name],strict)
     else:
         prefix = srcarg
-        names = etlapp.source.select(prefix,{'active':True})
+        names = source.select(prefix,{'active':True})
         return load_multi(prefix,names,strict)
 
 def load_multi(prefix,names,strict=True):
@@ -40,7 +39,7 @@ def load_multi(prefix,names,strict=True):
 @timedsingle
 def load_source_named(prefix,name):
     log.debug("source = '%s'.'%s'" % (prefix,name))
-    infile = etlapp.stage.latest(prefix,name)
+    infile = stage.latest(prefix,name)
     log.info("infile = '%s'" % infile)
     assert_loadable(prefix,name,infile)
     if not permit_loadable(prefix,name):
@@ -49,14 +48,14 @@ def load_source_named(prefix,name):
     log.info("table = '%s'" % table)
     psql = make_copy_command(table,infile)
     log.debug("psql = [%s]" % psql)
-    return dopsql(psql,etlapp.pgconf)
+    return dopsql(psql,kivo.pgconf)
 
 def permit_loadable(prefix,name):
     """A simpe abstracted perms check which allows us to override config settings
     for certain special sources."""
     if prefix in ('temp','norm'):
         return True
-    return etlapp.source.getval(prefix,name,'active')
+    return source.getval(prefix,name,'active')
 
 def assert_loadable(prefix,name,infile):
     if infile is None:

@@ -1,7 +1,7 @@
 import os
 import glob
-from etlapp.util.source import loadcfg_source
-from etlapp.logging import log
+from .util.source import loadcfg_source
+from .logging import log
 
 SRCDIR = 'source'
 CONFIG = {}

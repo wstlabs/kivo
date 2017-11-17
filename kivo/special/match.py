@@ -2,14 +2,13 @@ import os
 import copy
 from tabulate import tabulate
 from collections import OrderedDict
-from etlapp.logging import log
 from nycprop.identity import bbl2qblock
-from etlapp.decorators import timedsingle
-from etlapp.util.io import read_recs, save_recs
-import etlapp.util.nycgeo as nycgeo
-import etlapp.source
-import etlapp.stage
-import etlapp
+from ..logging import log
+from ..decorators import timedsingle
+from ..util.io import read_recs, save_recs
+from ..util import nycgeo
+from .. import source
+from .. import stage
 
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
@@ -20,7 +19,7 @@ def perform(posargs=None,options=None):
 
 def matchup():
     log.info("..")
-    infile = etlapp.stage.mkpath('export','dcp','condo-spec')
+    infile = stage.mkpath('export','dcp','condo-spec')
     if not os.path.exists(infile):
         raise ValueError("can't find infile '%s'" % infile)
     log.info("file ok!")
@@ -29,7 +28,7 @@ def matchup():
     pairs = list(unroll(recs))
     distinct = sorted(set(pairs))
     log.info("yields %d pairs (%d distinct)" % (len(pairs),len(distinct)))
-    outfile = etlapp.stage.mkpath('special','dcp','condo-map',autoviv=True)
+    outfile = stage.mkpath('special','dcp','condo-map',autoviv=True)
     outrecs = ({'unit':unit,'bank':bank} for unit,bank in distinct)
     save_recs(outfile,outrecs,header=('bank','unit'))
     log.info("done")
@@ -44,8 +43,8 @@ def unroll(recs):
 
 
 def match_olde():
-    infile_acris = etlapp.stage.mkpath('export','acris','condo-maybe')
-    infile_pluto = etlapp.stage.mkpath('export','pluto','condo-primary')
+    infile_acris = stage.mkpath('export','acris','condo-maybe')
+    infile_pluto = stage.mkpath('export','pluto','condo-primary')
     log.info("..")
     if not os.path.exists(infile_acris):
         raise ValueError("can't find infile '%s'" % infile_acris)

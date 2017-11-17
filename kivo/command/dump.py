@@ -1,12 +1,11 @@
 import os
-from etlapp.logging import log
-from etlapp.decorators import timedsingle
-from etlapp.util.source import splitpath, tablename
-from etlapp.util.dump import make_dump_command
-from etlapp.shell import dopsql
-import etlapp.source
-import etlapp.stage
-import etlapp
+from ..logging import log
+from ..decorators import timedsingle
+from ..util.source import splitpath, tablename
+from ..util.dump import make_dump_command
+from ..shell import dopsql
+from .. import source
+from .. import stage
 
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
@@ -22,7 +21,7 @@ def exec_any(srcarg,strict=True):
         return exec_multi(prefix,[name],strict)
     else:
         prefix = srcarg
-        names = etlapp.source.select(prefix,{'active':True})
+        names = source.select(prefix,{'active':True})
         return exec_multi(prefix,names,strict)
 
 def exec_multi(prefix,names,strict=True):
@@ -39,19 +38,19 @@ def exec_multi(prefix,names,strict=True):
 
 @timedsingle
 def dump_source_named(prefix,name,force=False):
-    # if not etlapp.source.exists(prefix):
+    # if not source.exists(prefix):
     #    raise ValueError("unrecognized source group '%s'")
     # XXX at this point, we should be checking for relation existence as well.
     table = tablename('norm',prefix,name)
     log.info("table = '%s'" % table)
-    outfile = etlapp.stage.mkpath('export',prefix,name,autoviv=True)
+    outfile = stage.mkpath('export',prefix,name,autoviv=True)
     log.info("outfile = '%s'" % outfile)
     if not force and os.path.exists(outfile):
         message = "cowardly refusing to overwrite existing outfile '%s' without --force option"
         raise ValueError(message % outfile)
     psql = make_dump_command(table,outfile)
     log.debug("psql = [%s]" % psql)
-    return dopsql(psql,etlapp.pgconf)
+    return dopsql(psql,kivo.pgconf)
 
     command = make_dump_command(prefix,name)
     print(command)

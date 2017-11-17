@@ -1,11 +1,10 @@
 import os
-from etlapp.logging import log
-from etlapp.decorators import timedsingle
-from etlapp.util.pull import make_pull_command
-from etlapp.util.source import splitpath
-import etlapp.source
-import etlapp.stage
-import etlapp
+from ..logging import log
+from ..decorators import timedsingle
+from ..util.pull import make_pull_command
+from ..util.source import splitpath
+from .. import source
+from .. import stage
 
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
@@ -21,7 +20,7 @@ def exec_any(srcarg,strict=True):
         return exec_multi(prefix,[name],strict)
     else:
         prefix = srcarg
-        names = etlapp.source.select(prefix,{'active':True})
+        names = source.select(prefix,{'active':True})
         return exec_multi(prefix,names,strict)
 
 def exec_multi(prefix,names,strict=True):
@@ -38,7 +37,7 @@ def exec_multi(prefix,names,strict=True):
 
 @timedsingle
 def pull_source_named(prefix,name):
-    if not etlapp.source.getval(prefix,name,'active'):
+    if not source.getval(prefix,name,'active'):
         raise ValueError("source inactive by configuration")
     command = make_pull_command(prefix,name)
     print(command)

@@ -1,4 +1,4 @@
-from etlapp.util.csvarg import make_csv_args
+from ..util.csvarg import make_csv_args
 
 def make_copy_command(table,infile,char=','):
     csvargs = make_csv_args(char)

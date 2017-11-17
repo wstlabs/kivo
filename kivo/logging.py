@@ -25,9 +25,9 @@ def setlevel(logger,tag):
 
     we can just do
 
-       etlapp.logging.setlevel(log,'debug')
+       kivo.logging.setlevel(log,'debug')
 
-    being as 'etlapp.logging' and the 'log' instance are already imported, according 
+    being as 'kivo.logging' and the 'log' instance are already imported, according 
     to the standard usage pattern.
     """
     print("setlevel %s" % tag)

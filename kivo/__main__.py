@@ -1,13 +1,14 @@
 import sys
 import argparse
-import etlapp.command
-import etlapp.util.io as io
-from etlapp.logging import log
-from etlapp.util.argparse import splitargv
-from etlapp.decorators import timedsingle
+import kivo
+from .logging import log
+from .command import resolve
+from .util.io import slurp_json
+from .util.argparse import splitargv
+from .decorators import timedsingle
 
 
-etlapp.pgconf = io.slurp_json("config/postgres.json")
+kivo.pgconf = slurp_json("config/postgres.json")
 TRACE = False # for noisy exception tracing
 
 USAGE = """etl command [arguments] [<keyword-arguments>]"""
@@ -28,7 +29,7 @@ def parse_args():
 @timedsingle
 def dispatch(command,posargs,options=None):
     log.debug("command='%s', posargs=%s, options=%s" % (command,posargs,options))
-    handler = etlapp.command.resolve(command)
+    handler = resolve(command)
     log.info("%s %s .." % (command,posargs))
     if handler:
         try:
@@ -46,7 +47,7 @@ def main():
     global TRACE
     command,posargs,options = parse_args()
     if options.debug:
-        etlapp.logging.setlevel(log,'debug')
+        kivo.logging.setlevel(log,'debug')
     if options.trace:
         TRACE = True
     status,delta = dispatch(command,posargs,options)

@@ -3,7 +3,7 @@ from . import load
 from . import pull
 from . import dump
 from . import check
-from etlapp.special import match
+from ..special import match
 
 
 def resolve(command):
