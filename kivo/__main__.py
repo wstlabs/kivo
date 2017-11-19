@@ -29,8 +29,11 @@ def parse_args():
 @timedsingle
 def dispatch(command,posargs,options=None):
     log.debug("command='%s', posargs=%s, options=%s" % (command,posargs,options))
-    handler = resolve(command)
     log.info("%s %s .." % (command,posargs))
+    if command is None:
+        log.error("no command argument")
+        return False
+    handler = resolve(command)
     if handler:
         try:
             return handler(posargs,options)
