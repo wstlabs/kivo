@@ -7,7 +7,7 @@ SRCDIR = 'source'
 CONFIG = {}
 
 # Yes, this method doesn't seem to do much, at present.
-# But it's a stub for an anticipate future change whereby the source directory 
+# But it's a stub for an anticipated future change whereby the source directory 
 # will be dynamically determined from the global install location.
 def srcdir():
     """Return the path to the source configuration directory."""
