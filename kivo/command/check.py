@@ -6,13 +6,6 @@ from ..decorators import timedsingle
 from .. import source
 from .. import stage
 
-@timedsingle
-def check_source_named(prefix,name):
-    log.debug("source = '%s'.'%s'" % (prefix,name))
-    infile = stage.latest(prefix,name)
-    return infile is not None
-
-
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     path = uniqarg(posargs)
@@ -39,6 +32,12 @@ def exec_multi(handler,prefix,names,strict=True):
         if strict and not status:
             return False
     return True
+
+@timedsingle
+def check_source_named(prefix,name):
+    log.debug("source = '%s'.'%s'" % (prefix,name))
+    infile = stage.latest(prefix,name)
+    return infile is not None
 
 def uniqarg(posargs):
     if posargs and len(posargs) == 1:
