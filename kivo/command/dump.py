@@ -61,3 +61,4 @@ def assert_loadable(prefix,name,infile):
         raise RuntimeError("no loadable file for prefix = '%s', name ='%s'" % (prefix,name))
     if not os.path.exists(infile):
         raise RuntimeError("can't find infile '%s'" % infile)
+
