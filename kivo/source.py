@@ -17,13 +17,6 @@ def srcdir():
 def configpath(prefix):
     return "%s/%s/sources.yaml" % (MODPATH,prefix)
 
-def prefixes():
-    """Returns, in sorted order, a list of prefixes for available data sources."""
-    srcpat = "%s/*.yaml" % srcdir()
-    files = (os.path.basename(_) for _ in glob.glob(srcpat))
-    tuples = (os.path.splitext(_) for _ in files)
-    return sorted((root for root,ext in tuples))
-
 def loadcfg(prefix):
     path = configpath(prefix)
     if not os.path.exists(path):
@@ -89,5 +82,17 @@ def exists(prefix,name=None):
     if name is None:
         return True
     return name in config
+
+
+#
+# DEPRECATED
+#
+
+def __prefixes():
+    """Returns, in sorted order, a list of prefixes for available data sources."""
+    srcpat = "%s/*.yaml" % srcdir()
+    files = (os.path.basename(_) for _ in glob.glob(srcpat))
+    tuples = (os.path.splitext(_) for _ in files)
+    return sorted((root for root,ext in tuples))
 
 
