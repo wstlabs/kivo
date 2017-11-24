@@ -35,9 +35,12 @@ def names(prefix):
 def getcfg_source(prefix,name,strict=True):
     """Shorthand to get the config dict for a named source.  If not present,
     a ValueError is raised."""
+    log.debug(f'prefix.name = {prefix}.{name}')
     config = getcfg(prefix)
-    if name in config:
-        return config[name]
+    tabcfg = config['tables']
+    log.debug(f'tabcfg = {tabcfg}')
+    if name in tabcfg:
+        return tabcfg[name]
     if strict:
         raise ValueError("invalid source name '%s' for prefix '%s'" % (name,prefix))
     else:
