@@ -5,6 +5,9 @@ from .logging import log
 STAGE = 'stage'
 PHASERANK = OrderedDict([('special',4),('xtracted',3),('unpack',2),('incoming',1),('proto',0)])
 
+class Stage(object):
+    pass
+
 def dirpath(phase,prefix,stage=STAGE):
     j = PHASERANK.get(phase)
     phasedir = "%d-%s" % (j,phase) if j is not None else phase
