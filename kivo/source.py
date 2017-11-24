@@ -3,6 +3,7 @@ import glob
 from .util.source import loadcfg_source
 from .logging import log
 
+MODPATH = "./modules"
 SRCDIR = 'source'
 CONFIG = {}
 
@@ -14,7 +15,7 @@ def srcdir():
     return SRCDIR
 
 def configpath(prefix):
-    return "%s/%s.yaml" % (srcdir(),prefix)
+    return "%s/%s/sources.yaml" % (MODPATH,prefix)
 
 def prefixes():
     """Returns, in sorted order, a list of prefixes for available data sources."""
