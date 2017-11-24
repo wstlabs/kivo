@@ -30,6 +30,15 @@ def mkpath(phase,prefix,name,stage=STAGE,autoviv=False):
     _dirpath = mkdir_phase(phase,prefix,stage,autoviv)
     return "%s/%s.csv" % (_dirpath,name)
 
+def latest(prefix,name,stage=STAGE):
+    for phase in PHASERANK.keys():
+        _filepath = filepath(phase,prefix,name,stage)
+        # print("%s.%s:%s -> %s" % (prefix,name,phase,_filepath))
+        if os.path.exists(_filepath):
+            return _filepath
+    return None
+
+
 """
 def export(prefix,name,stage=STAGE,autoviv=False):
     return mkpath(stage,'export',prefix,name,autoviv)
@@ -38,12 +47,4 @@ def incoming(prefix,name,stage=STAGE,autoviv=False):
     return mkpath(stage,'incoming',prefix,name,autoviv)
 """
 
-
-def latest(prefix,name,stage=STAGE):
-    for phase in PHASERANK.keys():
-        _filepath = filepath(phase,prefix,name,stage)
-        # print("%s.%s:%s -> %s" % (prefix,name,phase,_filepath))
-        if os.path.exists(_filepath):
-            return _filepath
-    return None
 
