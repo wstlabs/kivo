@@ -71,8 +71,8 @@ def select(prefix,query):
     (according to the match function in this module)."""
     config = getcfg(prefix)
     log.debug(f'config = {config}')
-    print(f'config={config}')
-    return list(k for k,v in config.items() if matches(v,query))
+    tables = config['tables']
+    return list(k for k,v in tables.items() if matches(v,query))
 
 
 def exists(prefix,name=None):

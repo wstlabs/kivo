@@ -6,11 +6,12 @@ from ..shell import dopsql
 from ..decorators import timedsingle
 from .. import source
 from .. import stage
+from .util.execute import exec_other, exec_source
 
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     if len(posargs) == 1:
-        return load_any(posargs[0])
+        return exec_source(load_source_named,posargs)
     else:
         raise ValueError("invalid usage")
 
