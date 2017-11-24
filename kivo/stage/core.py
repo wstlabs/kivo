@@ -2,11 +2,16 @@ import os
 from collections import OrderedDict
 from .logging import log
 
-STAGE = 'stage'
+ROOTDIR = '/opt/stage'
 PHASERANK = OrderedDict([('special',4),('xtracted',3),('unpack',2),('incoming',1),('proto',0)])
 
 class Stage(object):
-    pass
+
+    def __init__(self,rootdir=None):
+        if rootdir is None:
+            rootdir = ROOTDIR
+        self.rootdir = rootdir
+
 
 def dirpath(phase,prefix,stage=STAGE):
     j = PHASERANK.get(phase)
