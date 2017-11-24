@@ -13,17 +13,17 @@ class Stage(object):
         self.rootdir = rootdir
 
 
-    def dirpath(phase,prefix,stage=STAGE):
+    def dirpath(self,phase,prefix):
         j = PHASERANK.get(phase)
         phasedir = "%d-%s" % (j,phase) if j is not None else phase
-        return "%s/%s/%s" % (stage,phasedir,prefix)
+        return "%s/%s/%s" % (self.rootdir,phasedir,prefix)
 
-    def filepath(phase,prefix,name,stage=STAGE):
-        _dirpath = dirpath(phase,prefix,stage)
+    def filepath(self,phase,prefix,name):
+        _dirpath = self.dirpath(phase,prefix)
         return "%s/%s.csv" % (_dirpath,name)
 
-    def mkdir_phase(phase,prefix,stage=STAGE,autoviv=False):
-        _dirpath = dirpath(phase,prefix,stage)
+    def mkdir_phase(self,phase,prefix,autoviv=False):
+        _dirpath = self.dirpath(phase,prefix)
         if not os.path.exists(_dirpath):
             if autoviv:
                 os.mkdir(_dirpath)
@@ -31,13 +31,13 @@ class Stage(object):
                 raise ValueError("invalid state -- can't find dirpath '%s'" % _dirpath)
         return _dirpath
 
-    def mkpath(phase,prefix,name,stage=STAGE,autoviv=False):
-        _dirpath = mkdir_phase(phase,prefix,stage,autoviv)
+    def mkpath(self,phase,prefix,name,autoviv=False):
+        _dirpath = self.mkdir_phase(phase,prefix,autoviv)
         return "%s/%s.csv" % (_dirpath,name)
 
-    def latest(prefix,name,stage=STAGE):
+    def latest(self,prefix,name):
         for phase in PHASERANK.keys():
-            _filepath = filepath(phase,prefix,name,stage)
+            _filepath = self.filepath(phase,prefix,name)
             # print("%s.%s:%s -> %s" % (prefix,name,phase,_filepath))
             if os.path.exists(_filepath):
                 return _filepath
