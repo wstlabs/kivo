@@ -15,10 +15,11 @@ def srcdir():
     return SRCDIR
 
 def configpath(prefix):
-    return "%s/%s/sources.yaml" % (MODPATH,prefix)
+    return "%s/%s/source.yaml" % (MODPATH,prefix)
 
 def loadcfg(prefix):
     path = configpath(prefix)
+    log.debug(f'path = {path}')
     if not os.path.exists(path):
         raise ValueError("unrecognized source '%s'" % prefix)
     CONFIG[prefix] = loadcfg_source(path)
@@ -69,6 +70,8 @@ def select(prefix,query):
     """Given a source prefix, returns the names which match the given query
     (according to the match function in this module)."""
     config = getcfg(prefix)
+    log.debug(f'config = {config}')
+    print(f'config={config}')
     return list(k for k,v in config.items() if matches(v,query))
 
 

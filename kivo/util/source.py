@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from copy import deepcopy
+from ..logging import log
 import yaml
 
 DEFAULTS = {'active':True}
@@ -13,7 +14,7 @@ def splitpath(srcpath):
             return tuple(terms)
     raise ValueError("invalid source path [%s]" % srcpath)
 
-def _load_config_recs(path):
+def _load_yaml(path):
     with open(path,"rtU") as f:
         return yaml.load(f)
 
@@ -25,9 +26,13 @@ def augment(r,d):
             rr[k] = deepcopy(v)
     return rr
 
-def load_config_recs(path):
-    recs = _load_config_recs(path)
-    return [augment(r,DEFAULTS) for r in recs]
+def load_and_augment(path):
+    cfg = _load_yaml(path)[0]
+    log.debug(f'cfg = {cfg}')
+    table_recs_raw = cfg['tables']
+    table_recs_aug = [augment(r,DEFAULTS) for r in table_recs_raw]
+    cfg['tables'] = recs2dict(table_recs_aug)
+    return cfg
 
 def recs2dict(recs):
     d = OrderedDict()
@@ -40,8 +45,9 @@ def recs2dict(recs):
     return d
 
 def loadcfg_source(path):
-    recs = load_config_recs(path)
-    return recs2dict(recs)
+    log.debug(f'path = {path}')
+    cfg = load_and_augment(path)
+    return cfg
 
 def tablename(schema,prefix,name):
     name = name.replace('-','_').replace('.','_')
