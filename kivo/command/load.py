@@ -5,7 +5,7 @@ from ..util.load import make_copy_command
 from ..shell import dopsql
 from ..decorators import timedsingle
 from .. import source
-from .. import stage
+from ..stage import theStage
 from .util.execute import exec_other, exec_source
 
 def perform(posargs=None,options=None):
@@ -39,8 +39,10 @@ def load_multi(prefix,names,strict=True):
 
 @timedsingle
 def load_source_named(prefix,name):
-    log.debug("source = '%s'.'%s'" % (prefix,name))
-    infile = stage.latest(prefix,name)
+    _stage = theStage
+    log.debug(f'stage = {_stage}')
+    log.debug(f'source = {prefix}.{name}')
+    infile = _stage.latest(prefix,name)
     log.info("infile = '%s'" % infile)
     assert_loadable(prefix,name,infile)
     if not permit_loadable(prefix,name):
