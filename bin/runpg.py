@@ -1,5 +1,5 @@
 #
-# A simple argument packer for the standard postgres terminal.
+# A simple argument packer for the standard psql client. 
 # Assumes we'll be using the 'writeuser', whose password has been
 # set in the default .pgpass location (per the setup instructions). 
 #
