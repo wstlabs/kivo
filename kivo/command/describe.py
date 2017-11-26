@@ -13,18 +13,20 @@ def perform(posargs=None,options=None):
     return exec_source(HANDLERS,posargs,options)
 
 @timedsingle
-def describe_module(options):
+def describe_module(modulename):
     log.debug('yo!')
+    log.debug(f'modulename = {modulename}')
     return True
 
 @timedsingle
-def describe_table(options):
+def describe_tablespec(tablespec):
     log.debug('yo!')
+    log.debug(f'tablespec = {tablespec}')
     return True
 
 HANDLERS = {
     'module':describe_module,
-    'table':describe_table
+    'table':describe_tablespec
 }
 
 

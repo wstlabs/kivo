@@ -59,6 +59,7 @@ def _exec_module(handler,module):
     return status
 
 def _exec_tablespec(handler,tablespec):
+    log.debug(f'tablespec = {tablespec}')
     raise RuntimeError("not finished")
     if '.' in tablespec:
         srcpath = tablespec
