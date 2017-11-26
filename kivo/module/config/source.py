@@ -6,6 +6,47 @@ import yaml
 
 DEFAULTS = {'active':True}
 
+def load(modpath):
+    log.debug(f'modpath = {modpath}')
+    cfgpath = f'{modpath}/source.yaml'
+    if not os.path.exists(cfgpath):
+        raise ValueError("invalid module directory (no 'source.yaml') found")
+    blocks = _load_yaml(cfgpath)
+    return process(blocks)
+
+def __process(blocks):
+    cfg = blocks[0]
+    table_recs_raw = cfg['tables']
+    table_recs_aug = [augment(r,DEFAULTS) for r in table_recs_raw]
+    cfg['tables'] = recs2dict(table_recs_aug)
+    return cfg
+
+def process(blocks):
+    newcfg = {'prefix':OrderedDict()}
+    for block in blocks:
+        process_block(newcfg,block)
+    return newcfg
+
+def process_block(newcfg,block):
+    log.debug(f'newcfg = {newcfg}')
+    prefix = deepcopy(block['meta']['prefix'])
+    family = deepcopy(block['meta']['family'])
+    assert isinstance(prefix,str)
+    assert isinstance(family,str)
+    if prefix not in newcfg['prefix']:
+        newcfg['prefix'][prefix] = OrderedDict()
+    t = newcfg['prefix'][prefix]
+    for table in block['tables']:
+        log.debug(f'table = {table}')
+        d = deepcopy(table)
+        name = d['name']
+        del d['name']
+        d['family'] = family
+        t[name] = d
+
+def pivot_table(table,meta):
+    pass
+
 def splitpath(srcpath):
     if isinstance(srcpath,str):
         terms = srcpath.split('.')
@@ -27,12 +68,6 @@ def augment(r,d):
             rr[k] = deepcopy(v)
     return rr
 
-def process(blocks):
-    cfg = blocks[0]
-    table_recs_raw = cfg['tables']
-    table_recs_aug = [augment(r,DEFAULTS) for r in table_recs_raw]
-    cfg['tables'] = recs2dict(table_recs_aug)
-    return cfg
 
 def recs2dict(recs):
     d = OrderedDict()
@@ -43,14 +78,6 @@ def recs2dict(recs):
             raise ValueError("invalid configuration - duplicated source name '%s' detected" % name)
         d[name] = deepcopy(r)
     return d
-
-def load(modpath):
-    log.debug(f'modpath = {modpath}')
-    cfgpath = f'{modpath}/source.yaml'
-    if not os.path.exists(cfgpath):
-        raise ValueError("invalid module directory (no 'source.yaml') found")
-    blocks = _load_yaml(cfgpath)
-    return process(blocks)
 
 def tablename(schema,prefix,name):
     _prefix = prefix.replace('-','_')
