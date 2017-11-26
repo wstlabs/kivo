@@ -7,7 +7,7 @@ from .util.execute import exec_noarg
 
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
-    return exec_noarg(list_modules,options)
+    return exec_noarg(list_modules,posargs,options)
 
 @timedsingle
 def list_modules(options):

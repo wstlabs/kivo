@@ -1,10 +1,18 @@
 import re
+from . import list_
 from . import load
 from . import pull
 from . import dump
 from . import check
 from ..special import match
 
+def command2module(command):
+    """
+    Returns the module name corresponding to a command name.  In most cases,
+    the module name is exactly the command name, but in some cases it's slightly
+    different (for example, as a hack to get around reserved word issues).
+    """
+    return 'list_' if command == 'list' else command
 
 def resolve(command):
     """
@@ -12,7 +20,8 @@ def resolve(command):
     handler for the module corresponding to that command, and returns it.  If the module
     isn't loaded (or the command is syntactically invalid), returns None.
     """
-    funcname = "%s.perform" % command
+    module = command2module(command)
+    funcname = "%s.perform" % module
     if is_legit(command):
         try:
             handler = eval(funcname)
