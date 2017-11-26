@@ -1,6 +1,4 @@
 import os
-from .core import Module
-from . import config
 from .util.misc import load_module_from, find_modules_under
 
 PATH = "./modules"
