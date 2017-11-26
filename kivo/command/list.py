@@ -1,7 +1,5 @@
 import os
 from ..logging import log
-from ..util.source import splitpath, tablename
-from ..shell import dopsql
 from ..decorators import timedsingle
 from .. import source
 from .. import stage
