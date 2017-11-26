@@ -45,7 +45,12 @@ def assert_loadable(prefix,name,infile):
     if not os.path.exists(infile):
         raise RuntimeError("can't find infile '%s'" % infile)
 
-def load_any(srcarg,strict=True):
+
+#
+# DEPRECATED
+#
+
+def __load_any(srcarg,strict=True):
     if '.' in srcarg:
         srcpath = srcarg
         prefix,name = splitpath(srcpath)
@@ -55,7 +60,7 @@ def load_any(srcarg,strict=True):
         names = source.select(prefix,{'active':True})
         return load_multi(prefix,names,strict)
 
-def load_multi(prefix,names,strict=True):
+def __load_multi(prefix,names,strict=True):
     """Load multiple named sourcs under a given prefix."""
     log.debug("names = %s" % names)
     for name in names:
