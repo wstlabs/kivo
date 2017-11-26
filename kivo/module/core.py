@@ -1,6 +1,6 @@
 
 class Module(object):
 
-    def __init__(self):
-        pass
+    def __init__(self,config):
+        self._config = config
 
