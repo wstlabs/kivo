@@ -1,4 +1,5 @@
 import os
+import kivo
 from ..logging import log
 from ..util.source import splitpath, tablename
 from ..util.load import make_copy_command
@@ -47,7 +48,7 @@ def load_source_named(prefix,name):
     assert_loadable(prefix,name,infile)
     if not permit_loadable(prefix,name):
         raise ValueError("source inactive by configuration")
-    table = tablename('flat',prefix,name)
+    table = tablename('t0',prefix,name)
     log.info("table = '%s'" % table)
     psql = make_copy_command(table,infile)
     log.debug("psql = [%s]" % psql)
