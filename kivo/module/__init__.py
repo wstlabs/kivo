@@ -1,5 +1,7 @@
 from .core import Module
 
+PATHS = ["./modules"]
+
 def load(name):
     pass
 
