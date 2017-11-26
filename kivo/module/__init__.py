@@ -1,11 +1,5 @@
 from .core import Module
 
-PATHS = ["./modules"]
-
-def load(name):
+def load(path):
     pass
-
-def load_from(path):
-    pass
-
 
