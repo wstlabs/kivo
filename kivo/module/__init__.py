@@ -2,7 +2,7 @@ import os
 from .core import Module
 from .config import loadcfg_source
 
-PATHS = ["./modules"]
+PATH = "./modules"
 
 def load(name):
     pass
@@ -13,4 +13,7 @@ def load_from(path):
         return Module(config)
     else:
         return None
+
+def find(dirpath=PATH):
+    pass
 
