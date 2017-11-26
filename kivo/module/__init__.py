@@ -5,8 +5,8 @@ from .util.misc import load_module_from, find_modules_under
 PATH = "./modules"
 
 def load(name,path=PATH):
-    modpath = "%s/%s" % (path,name)
-    return load_module_from(modpath)
+    # modpath = "%s/%s" % (path,name)
+    return load_module_from(path,name)
 
 def find(dirpath=PATH):
     return find_modules_under(dirpath)

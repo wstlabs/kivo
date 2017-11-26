@@ -4,12 +4,13 @@ from ...logging import log
 from .. import config
 from ...module import Module
 
-def load_module_from(path):
-    log.debug(f'path = {path} ..')
-    if os.path.exists(path):
-        config_source = config.source.load(path)
-        log.debug(f'config_source = {config_source}')
-        return Module(config_source)
+def load_module_from(path,name):
+    log.debug(f'path = {path}, name = {name} ..')
+    modpath = "%s/%s" % (path,name)
+    if os.path.exists(modpath):
+        srccfg = config.source.load(modpath)
+        log.debug(f'srccfg = {srccfg}')
+        return Module(name,srccfg)
     else:
         return None
 
