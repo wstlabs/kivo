@@ -50,8 +50,9 @@ def loadcfg_source(path):
     return cfg
 
 def tablename(schema,prefix,name):
-    name = name.replace('-','_').replace('.','_')
-    return "%s.%s_%s" % (schema,prefix,name)
+    _prefix = prefix.replace('-','_')
+    _name = name.replace('-','_')
+    return "%s.%s_%s" % (schema,_prefix,_name)
 
 def source2prefix(srcpath):
     terms = srcpath.split('.')
