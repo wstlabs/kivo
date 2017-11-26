@@ -16,6 +16,15 @@ def extract_source(options):
         return {'table':options.table}
     raise ValueError("invalid usage (exactly one of the --module or--table must be present)")
 
+def exec_noarg(handler,posargs=None,options=None):
+    log.debug("posargs=%s, options=%s" % (posargs,options))
+    if len(posargs):
+        raise ValueError("invalid usage (too many positional arguments)")
+    status,delta = handler(options)
+    _status = 'OK' if status else 'FAIL'
+    log.info("<noarg> - status = %s in %.3f sec" % (_status,delta))
+    return status
+
 def exec_other(handler,posargs=None,options=None):
     status,delta = handler(posargs)
     _status = 'OK' if status else 'FAIL'
@@ -26,15 +35,6 @@ def exec_source(handler,posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     source = extract_source(options)
     return _exec_source(handler,source)
-
-def exec_noarg(handler,posargs=None,options=None):
-    log.debug("posargs=%s, options=%s" % (posargs,options))
-    if len(posargs):
-        raise ValueError("invalid usage (too many positional arguments)")
-    status,delta = handler(options)
-    _status = 'OK' if status else 'FAIL'
-    log.info("<noarg> - status = %s in %.3f sec" % (_status,delta))
-    return status
 
 def _exec_source(handler,source):
     module = source.get('module')
