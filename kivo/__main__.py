@@ -17,6 +17,9 @@ def parse_options(kwargv):
     parser.add_argument("--stage", type=str, required=False, help="staging root", default='stage')
     parser.add_argument("--debug", required=False, action="store_true", help="more debugging")
     parser.add_argument("--trace", required=False, action="store_true", help="show noisy exception traces")
+    group = parser.add_mutually_exclusive_group(required=False)
+    group.add_argument("--module", type=str, help="module name")
+    group.add_argument("--table", type=str, help="table name")
     return parser.parse_args(kwargv)
 
 def parse_args():
@@ -49,6 +52,8 @@ def dispatch(command,posargs,options=None):
 def main():
     global TRACE
     command,posargs,options = parse_args()
+    log.debug(f'posargs = {posargs}')
+    log.debug(f'options = {options}')
     if options.debug:
         kivo.logging.setlevel(log,'debug')
     if options.trace:
