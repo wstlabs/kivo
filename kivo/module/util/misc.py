@@ -1,5 +1,6 @@
 import os
 import re
+import simplejson as json
 from ...logging import log
 from .. import config
 from ...module import Module
@@ -9,7 +10,8 @@ def load_module_from(path,name):
     modpath = "%s/%s" % (path,name)
     if os.path.exists(modpath):
         srccfg = config.source.load(modpath)
-        log.debug(f'srccfg = {srccfg}')
+        s = json.dumps(srccfg,indent=2)
+        log.debug(f'srccfg = {s}')
         return Module(name,srccfg)
     else:
         return None
