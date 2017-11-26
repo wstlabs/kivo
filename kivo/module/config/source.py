@@ -44,7 +44,7 @@ def recs2dict(recs):
         d[name] = deepcopy(r)
     return d
 
-def loadcfg_source(path):
+def load(path):
     log.debug(f'path = {path}')
     cfg = load_and_augment(path)
     return cfg
