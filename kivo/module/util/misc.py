@@ -1,15 +1,12 @@
 import os
 
-def load(name):
-    pass
-
-def load_from(path):
+def load_module_from(path):
     if os.path.exists(path):
         config_source = config.source.load(path)
         return Module(config_source)
     else:
         return None
 
-def find(dirpath):
+def find_modules_under(dirpath):
     return ['foobar']
 
