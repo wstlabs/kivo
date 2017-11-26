@@ -8,5 +8,5 @@ def load_module_from(path):
         return None
 
 def find_modules_under(dirpath):
-    return ['foobar']
+    yield 'foobar'
 

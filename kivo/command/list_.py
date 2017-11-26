@@ -13,7 +13,7 @@ def perform(posargs=None,options=None):
 @timedsingle
 def list_modules(options):
     log.debug('yo!')
-    modules = module.find()
+    modules = list(module.find())
     _pl = 's' if len(modules) else ''
     print("Found %d module%s:" % (len(modules),_pl))
     for name in modules:
