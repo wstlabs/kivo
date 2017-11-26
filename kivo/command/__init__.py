@@ -1,4 +1,5 @@
 import re
+from . import describe
 from . import list_
 from . import load
 from . import pull
