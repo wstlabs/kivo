@@ -15,5 +15,5 @@ def load_from(path):
         return None
 
 def find(dirpath=PATH):
-    pass
+    return ['foobar']
 
