@@ -13,11 +13,6 @@ def perform(posargs=None,options=None):
 @timedsingle
 def describe_source(options):
     log.debug('yo!')
-    modules = list(module.find())
-    _pl = 's' if len(modules) else ''
-    print("Found %d module%s:" % (len(modules),_pl))
-    for name in modules:
-        print(f' - {name}')
     log.debug('there.')
     return True
 
