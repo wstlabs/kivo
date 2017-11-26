@@ -25,7 +25,7 @@ def find_modules_under(basedir):
 
 def is_module_dir(dirpath):
     """Return true if the pathname refers to an existing kivo module directory."""
-    log.debug(f'is dirpath={dirpath}?')
+    # log.debug(f'is dirpath={dirpath}?')
     if not os.path.isdir(dirpath):
         return False
     srcpath = "%s/source.yaml" % dirpath
