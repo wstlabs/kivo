@@ -1,6 +1,7 @@
 import os
 import re
 from ...logging import log
+from .. import config
 
 def load_module_from(path):
     if os.path.exists(path):
