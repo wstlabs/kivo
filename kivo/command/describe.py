@@ -17,7 +17,13 @@ def describe_module(modulename):
     log.debug('yo!')
     log.debug(f'modulename = {modulename}')
     kivomod = module.load(modulename)
-    log.debug(f'kivomod = {kivomod}')
+    log.info(f'kivomod = {kivomod}')
+    tables = list(kivomod.tables())
+    n = len(tables)
+    _pl = '' if n == 1 else 's'
+    log.info(f'with {n} table{_pl}:')
+    for table in tables:
+        log.info(f' - {table}')
     log.debug('happy')
     return True
 
