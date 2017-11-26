@@ -14,6 +14,16 @@ def exec_source(handler,posargs=None,options=None):
     srcarg = uniqarg(posargs)
     return exec_src_any(handler,srcarg)
 
+def exec_noarg(handler,posargs=None,options=None):
+    log.debug("posargs=%s, options=%s" % (posargs,options))
+    if len(posargs):
+        raise ValueError("invalid usage (too many positional arguments)")
+    status,delta = handler(options)
+    _status = 'OK' if status else 'FAIL'
+    log.info("source %s.%s - status = %s in %.3f sec" % (prefix,name,_status,delta))
+    return status
+
+
 def exec_src_any(handler,srcarg,strict=True):
     if '.' in srcarg:
         srcpath = srcarg
