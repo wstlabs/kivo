@@ -2,10 +2,13 @@ import os
 import re
 from ...logging import log
 from .. import config
+from ...module import Module
 
 def load_module_from(path):
+    log.debug(f'path = {path} ..')
     if os.path.exists(path):
         config_source = config.source.load(path)
+        log.debug(f'config_source = {config_source}')
         return Module(config_source)
     else:
         return None

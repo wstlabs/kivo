@@ -1,3 +1,4 @@
+import os
 from collections import OrderedDict
 from copy import deepcopy
 from ...logging import log
@@ -26,9 +27,8 @@ def augment(r,d):
             rr[k] = deepcopy(v)
     return rr
 
-def load_and_augment(path):
-    cfg = _load_yaml(path)[0]
-    log.debug(f'cfg = {cfg}')
+def process(blocks):
+    cfg = blocks[0]
     table_recs_raw = cfg['tables']
     table_recs_aug = [augment(r,DEFAULTS) for r in table_recs_raw]
     cfg['tables'] = recs2dict(table_recs_aug)
@@ -44,10 +44,13 @@ def recs2dict(recs):
         d[name] = deepcopy(r)
     return d
 
-def load(path):
-    log.debug(f'path = {path}')
-    cfg = load_and_augment(path)
-    return cfg
+def load(modpath):
+    log.debug(f'modpath = {modpath}')
+    cfgpath = f'{modpath}/source.yaml'
+    if not os.path.exists(cfgpath):
+        raise ValueError("invalid module directory (no 'source.yaml') found")
+    blocks = _load_yaml(cfgpath)
+    return process(blocks)
 
 def tablename(schema,prefix,name):
     _prefix = prefix.replace('-','_')

@@ -16,6 +16,9 @@ def perform(posargs=None,options=None):
 def describe_module(modulename):
     log.debug('yo!')
     log.debug(f'modulename = {modulename}')
+    kivomod = module.load(modulename)
+    log.debug(f'kivomod = {kivomod}')
+    log.debug('happy')
     return True
 
 @timedsingle
