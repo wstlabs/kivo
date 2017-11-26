@@ -16,28 +16,6 @@ def perform(posargs=None,options=None):
     else:
         raise ValueError("invalid usage")
 
-def load_any(srcarg,strict=True):
-    if '.' in srcarg:
-        srcpath = srcarg
-        prefix,name = splitpath(srcpath)
-        return load_multi(prefix,[name],strict)
-    else:
-        prefix = srcarg
-        names = source.select(prefix,{'active':True})
-        return load_multi(prefix,names,strict)
-
-def load_multi(prefix,names,strict=True):
-    """Load multiple named sourcs under a given prefix."""
-    log.debug("names = %s" % names)
-    for name in names:
-        log.info("source %s.%s .." % (prefix,name))
-        status,delta = load_source_named(prefix,name)
-        _status = 'OK' if status else 'FAIL'
-        log.info("source %s.%s - status = %s in %.3f sec" % (prefix,name,_status,delta))
-        if strict and not status:
-            return False
-    return True
-
 @timedsingle
 def load_source_named(prefix,name):
     _stage = theStage
@@ -66,3 +44,26 @@ def assert_loadable(prefix,name,infile):
         raise RuntimeError("no loadable file for prefix = '%s', name ='%s'" % (prefix,name))
     if not os.path.exists(infile):
         raise RuntimeError("can't find infile '%s'" % infile)
+
+def load_any(srcarg,strict=True):
+    if '.' in srcarg:
+        srcpath = srcarg
+        prefix,name = splitpath(srcpath)
+        return load_multi(prefix,[name],strict)
+    else:
+        prefix = srcarg
+        names = source.select(prefix,{'active':True})
+        return load_multi(prefix,names,strict)
+
+def load_multi(prefix,names,strict=True):
+    """Load multiple named sourcs under a given prefix."""
+    log.debug("names = %s" % names)
+    for name in names:
+        log.info("source %s.%s .." % (prefix,name))
+        status,delta = load_source_named(prefix,name)
+        _status = 'OK' if status else 'FAIL'
+        log.info("source %s.%s - status = %s in %.3f sec" % (prefix,name,_status,delta))
+        if strict and not status:
+            return False
+    return True
+
