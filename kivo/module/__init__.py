@@ -1,19 +1,14 @@
 import os
 from .core import Module
-from .config import loadcfg_source
+from . import config
+from .util.misc import load_module_from, find_modules_under
 
 PATH = "./modules"
 
-def load(name):
-    pass
-
-def load_from(path):
-    if os.path.exists(path):
-        config = loadcfg_source(path)
-        return Module(config)
-    else:
-        return None
+def load(name,path=PATH):
+    modpath = "%s/%s" % (path,name)
+    return load_module_from(modpath)
 
 def find(dirpath=PATH):
-    return ['foobar']
+    return find_modules_under(dirpath)
 
