@@ -20,7 +20,7 @@ def exec_noarg(handler,posargs=None,options=None):
         raise ValueError("invalid usage (too many positional arguments)")
     status,delta = handler(options)
     _status = 'OK' if status else 'FAIL'
-    log.info("source %s.%s - status = %s in %.3f sec" % (prefix,name,_status,delta))
+    log.info("<noarg> - status = %s in %.3f sec" % (_status,delta))
     return status
 
 
