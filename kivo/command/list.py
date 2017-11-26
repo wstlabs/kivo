@@ -3,16 +3,14 @@ from ..logging import log
 from ..decorators import timedsingle
 from .. import source
 from .. import stage
-from .util.execute import exec_other, exec_source
+from .util.execute import exec_noarg
 
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
-    path = uniqarg(posargs)
-    return exec_any(check_source_named,path)
+    return exec_noarg(list_modules,options)
 
 @timedsingle
-def check_source_named(prefix,name):
-    log.debug("source = '%s'.'%s'" % (prefix,name))
-    infile = stage.latest(prefix,name)
-    return infile is not None
+def list_modules(options):
+    log.debug('yo!')
+    return True
 
