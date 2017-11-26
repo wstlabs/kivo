@@ -25,17 +25,21 @@ def exec_noarg(handler,posargs=None,options=None):
     log.info("<noarg> - status = %s in %.3f sec" % (_status,delta))
     return status
 
-def exec_source(handler,posargs=None,options=None):
+def exec_source(handlers,posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
+    if len(posargs):
+        raise ValueError("invalid usage (too many positional arguments)")
     source = extract_source(options)
-    return _exec_source(handler,source)
+    return _exec_source(handlers,source)
 
-def _exec_source(handler,source):
+def _exec_source(handlers,source):
     module = source.get('module')
     tablespec  = source.get('table')
     if module is not None:
+        handler = handlers.get('module')
         return _exec_module(handler,module)
     if tablespec is not None:
+        handler = handlers.get('table')
         return _exec_tablespec(handler,tablespec)
     # This case really shouldn't happen if our logic in extract_source() is correct. 
     raise RuntimeError("invalid state")
