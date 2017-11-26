@@ -3,6 +3,19 @@ from ...util.source import splitpath, tablename
 from ...decorators import timedsingle
 from ... import source
 
+def extract_source(options):
+    """Extract source argument (and type) from options struct."""
+    # In theory, both of the failure cases (both options present, or neither present) 
+    # has already been excluded via the 'add_mutually_exclusive_group' construct in parse_args().  
+    # But to be really robust we need to check explicitly at this stage, as well.
+    if options.module and options.table:
+        raise ValueError("invalid usage (--module and --table options are mutuallly exclusive)")
+    if options.module:
+        return {'module':options.module}
+    if options.table:
+        return {'table':options.table}
+    raise ValueError("invalid usage (exactly one of the --module or--table must be present)")
+
 def exec_other(handler,posargs=None,options=None):
     status,delta = handler(posargs)
     _status = 'OK' if status else 'FAIL'
@@ -11,8 +24,8 @@ def exec_other(handler,posargs=None,options=None):
 
 def exec_source(handler,posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
-    srcarg = uniqarg(posargs)
-    return exec_src_any(handler,srcarg)
+    source = extract_source(options)
+    return _exec_source(handler,source)
 
 def exec_noarg(handler,posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
@@ -23,22 +36,42 @@ def exec_noarg(handler,posargs=None,options=None):
     log.info("<noarg> - status = %s in %.3f sec" % (_status,delta))
     return status
 
+def _exec_source(handler,source):
+    module = source.get('module')
+    tablespec  = source.get('table')
+    if module is not None:
+        return _exec_module(handler,module)
+    if tablespec is not None:
+        return _exec_tablespec(handler,tablespec)
+    # This case really shouldn't happen if our logic in extract_source() is correct. 
+    raise RuntimeError("invalid state")
 
-def exec_src_any(handler,srcarg,strict=True):
-    if '.' in srcarg:
-        srcpath = srcarg
+def _exec_module(handler,module):
+    log.debug(f'module = {module}')
+    log.info(f'module = {module} ..')
+    status,delta = handler(module)
+    _status = 'OK' if status else 'FAIL'
+    log.info("module %s - status = %s in %.3f sec" % (module,_status,delta))
+    return status
+
+def _exec_tablespec(handler,tablespec):
+    raise RuntimeError("not finished")
+    if '.' in tablespec:
+        srcpath = tablespec
         log.debug(f'srcpath = {srcpath}')
-        prefix,name = splitpath(srcpath)
-        log.debug(f'name = {name}')
-        return exec_src_multi(handler,prefix,[name],strict)
+        raise RuntimeError("not finished")
+        # prefix,name = splitpath(srcpath)
+        # log.debug(f'name = {name}')
+        # return exec_src_multi(handler,prefix,[name])
     else:
         prefix = srcarg
-        log.debug(f'prefix = {prefix}')
-        names = source.select(prefix,{'active':True})
-        log.debug(f'names = {names}')
-        return exec_src_multi(handler,prefix,names,strict)
+        raise RuntimeError("not finished")
+        # log.debug(f'prefix = {prefix}')
+        # names = source.select(prefix,{'active':True})
+        # log.debug(f'names = {names}')
+        # return exec_src_multi(handler,prefix,names)
 
-def exec_src_multi(handler,prefix,names,strict=True):
+def exec_src_multi(handler,prefix,names):
     """Do something for multiple named sources under a given prefix."""
     log.debug(f'names = {names}')
     for name in names:
@@ -46,7 +79,7 @@ def exec_src_multi(handler,prefix,names,strict=True):
         status,delta = handler(prefix,name)
         _status = 'OK' if status else 'FAIL'
         log.info("source %s.%s - status = %s in %.3f sec" % (prefix,name,_status,delta))
-        if strict and not status:
+        if not status:
             return False
     return True
 
