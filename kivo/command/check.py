@@ -11,6 +11,17 @@ def perform(posargs=None,options=None):
     path = uniqarg(posargs)
     return exec_any(check_source_named,path)
 
+@timedsingle
+def check_source_named(prefix,name):
+    log.debug("source = '%s'.'%s'" % (prefix,name))
+    infile = stage.latest(prefix,name)
+    return infile is not None
+
+def uniqarg(posargs):
+    if posargs and len(posargs) == 1:
+        return posargs[0]
+    raise ValueError("invalid usage (too many positional arguments)")
+
 def exec_any(handler,srcarg,strict=True):
     if '.' in srcarg:
         srcpath = srcarg
@@ -33,13 +44,3 @@ def exec_multi(handler,prefix,names,strict=True):
             return False
     return True
 
-@timedsingle
-def check_source_named(prefix,name):
-    log.debug("source = '%s'.'%s'" % (prefix,name))
-    infile = stage.latest(prefix,name)
-    return infile is not None
-
-def uniqarg(posargs):
-    if posargs and len(posargs) == 1:
-        return posargs[0]
-    raise ValueError("invalid usage (too many positional arguments)")
