@@ -1,8 +1,4 @@
 import os
-from .core import Module
-from . import config
-
-PATH = "./modules"
 
 def load(name):
     pass
@@ -14,6 +10,6 @@ def load_from(path):
     else:
         return None
 
-def find(dirpath=PATH):
+def find(dirpath):
     return ['foobar']
 
