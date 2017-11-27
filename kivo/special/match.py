@@ -7,7 +7,6 @@ from ..logging import log
 from ..decorators import timedsingle
 from ..util.io import read_recs, save_recs
 from ..util import nycgeo
-from .. import source
 from .. import stage
 
 def perform(posargs=None,options=None):

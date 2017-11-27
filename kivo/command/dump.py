@@ -4,7 +4,6 @@ from ..decorators import timedsingle
 from ..util.source import splitpath, tablename
 from ..util.dump import make_dump_command
 from ..shell import dopsql
-from .. import source
 from .. import stage
 
 def perform(posargs=None,options=None):

@@ -1,7 +1,6 @@
 import os
 from ..logging import log
 from ..decorators import timedsingle
-from .. import source
 from .. import stage
 from .util.execute import exec_noarg
 from .. import module

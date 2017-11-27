@@ -1,9 +1,8 @@
 import os
 from ..logging import log
 from ..decorators import timedsingle
-from .. import source
-from .. import stage
 from .util.execute import exec_source
+from .. import stage
 from .. import module
 
 HANDLERS = {}

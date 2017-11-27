@@ -1,4 +1,3 @@
-from .. import source
 from .. import stage
 
 def make_url(slug):

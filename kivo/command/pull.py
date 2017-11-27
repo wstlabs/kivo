@@ -2,8 +2,7 @@ import os
 from ..logging import log
 from ..decorators import timedsingle
 from ..util.pull import make_pull_command
-from ..util.source import splitpath
-from .. import source
+from ..util.source import split_table_spec
 from .. import stage
 
 HANDLERS = {}
@@ -14,7 +13,10 @@ def perform(posargs=None,options=None):
 
 @timedsingle
 def pull_tablespec(tablespec):
-    raise NotImplementedError("not yet")
+    prefix,name = split_table_spec(tablespec)
+    log.debug(f'prefix = {prefix}, name = {name}')
+    delta,status = pull_source_canon(prefix,name)
+    return status
 
 @timedsingle
 def pull_prefix(prefix):

@@ -5,7 +5,6 @@ from ..util.source import splitpath, tablename
 from ..util.load import make_copy_command
 from ..shell import dopsql
 from ..decorators import timedsingle
-from .. import source
 from ..stage import theStage
 from .util.execute import exec_other, exec_source
 

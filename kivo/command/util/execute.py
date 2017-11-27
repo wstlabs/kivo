@@ -1,7 +1,6 @@
 from ...logging import log
 from ...util.source import splitpath, tablename
 from ...decorators import timedsingle
-from ... import source
 
 def extract_source(options):
     """Extract source argument (and type) from options struct."""
