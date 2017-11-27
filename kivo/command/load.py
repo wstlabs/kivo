@@ -15,6 +15,13 @@ def perform(posargs=None,options=None):
     return exec_source(HANDLERS,posargs,options)
 
 
+HANDLERS = {
+   'table':load_tablespec,
+   'prefix':load_prefix,
+   'module':load_module
+}
+
+
 def __perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     if len(posargs) == 1:
