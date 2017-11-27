@@ -3,6 +3,10 @@ from .core import Module
 from .util.misc import load_module_from, find_modules_under
 
 PATH = "./modules"
+INDEX = None
+
+def build_index(path):
+    pass
 
 def load(name,path=PATH):
     # modpath = "%s/%s" % (path,name)
