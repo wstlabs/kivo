@@ -14,11 +14,11 @@ def splitpath(srcpath):
             return tuple(terms)
     raise ValueError("invalid source path [%s]" % srcpath)
 
-def _load_yaml(path):
+def ___load_yaml(path):
     with open(path,"rtU") as f:
         return yaml.load(f)
 
-def augment(r,d):
+def __augment(r,d):
     """Creats a new dict which is a deepcopy of r, overlayed with values from d."""
     rr = deepcopy(r)
     for k,v in d.items():
@@ -26,7 +26,7 @@ def augment(r,d):
             rr[k] = deepcopy(v)
     return rr
 
-def load_and_augment(path):
+def ___load_and_augment(path):
     cfg = _load_yaml(path)[0]
     log.debug(f'cfg = {cfg}')
     table_recs_raw = cfg['tables']
@@ -34,7 +34,7 @@ def load_and_augment(path):
     cfg['tables'] = recs2dict(table_recs_aug)
     return cfg
 
-def recs2dict(recs):
+def ___recs2dict(recs):
     d = OrderedDict()
     for r in recs:
         name = r['name']
@@ -44,7 +44,7 @@ def recs2dict(recs):
         d[name] = deepcopy(r)
     return d
 
-def loadcfg_source(path):
+def __loadcfg_source(path):
     log.debug(f'path = {path}')
     cfg = load_and_augment(path)
     return cfg
