@@ -12,6 +12,20 @@ def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     return exec_source(HANDLERS,posargs,options)
 
+@timedsingle
+def pull_source_named(prefix,name):
+    if not source.getval(prefix,name,'active'):
+        raise ValueError("source inactive by configuration")
+    command = make_pull_command(prefix,name)
+    print(command)
+    return True
+
+def assert_loadable(prefix,name,infile):
+    if infile is None:
+        raise RuntimeError("no loadable file for prefix = '%s', name ='%s'" % (prefix,name))
+    if not os.path.exists(infile):
+        raise RuntimeError("can't find infile '%s'" % infile)
+
 def __perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     if len(posargs) == 1:
@@ -41,16 +55,3 @@ def __exec_multi(prefix,names,strict=True):
             return False
     return True
 
-@timedsingle
-def pull_source_named(prefix,name):
-    if not source.getval(prefix,name,'active'):
-        raise ValueError("source inactive by configuration")
-    command = make_pull_command(prefix,name)
-    print(command)
-    return True
-
-def assert_loadable(prefix,name,infile):
-    if infile is None:
-        raise RuntimeError("no loadable file for prefix = '%s', name ='%s'" % (prefix,name))
-    if not os.path.exists(infile):
-        raise RuntimeError("can't find infile '%s'" % infile)
