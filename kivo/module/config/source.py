@@ -14,13 +14,6 @@ def load(modpath):
     blocks = _load_yaml(cfgpath)
     return process(blocks)
 
-def __process(blocks):
-    cfg = blocks[0]
-    table_recs_raw = cfg['tables']
-    table_recs_aug = [augment(r,DEFAULTS) for r in table_recs_raw]
-    cfg['tables'] = recs2dict(table_recs_aug)
-    return cfg
-
 def process(blocks):
     newcfg = {'prefix':OrderedDict()}
     for block in blocks:
@@ -89,4 +82,17 @@ def source2prefix(srcpath):
     if len(terms) > 1:
         return terms[0]
     raise ValueError("invalid source path [%s]" % srcpath)
+
+
+#
+# DEPRECATED
+#
+
+def __process(blocks):
+    cfg = blocks[0]
+    table_recs_raw = cfg['tables']
+    table_recs_aug = [augment(r,DEFAULTS) for r in table_recs_raw]
+    cfg['tables'] = recs2dict(table_recs_aug)
+    return cfg
+
 
