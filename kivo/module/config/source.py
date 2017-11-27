@@ -35,7 +35,7 @@ def process_block(newcfg,block):
         name = r['name']
         del r['name']
         r['family'] = family
-        t[name] = r 
+        t[name] = r
 
 def _load_yaml(path):
     with open(path,"rtU") as f:
