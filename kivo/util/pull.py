@@ -13,7 +13,7 @@ def make_pull_command(tspec,r):
         raise NotImplementedError("segments not supported in this operation")
     url = make_url(tspec,r)
     destfile = theStage.mkpath('incoming',prefix,name,autoviv=True)
-    return "curl -o %s '%s'" % (destfile,url)
+    return f"curl -o {destfile} '{url}'"
 
 
 
