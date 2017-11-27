@@ -7,9 +7,12 @@ from .util.io import slurp_json
 from .util.argparse import splitargv
 from .decorators import timedsingle
 
-
-kivo.pgconf = slurp_json("config/postgres.json")
 TRACE = False # for noisy exception tracing
+
+def configure():
+    log.debug('..')
+    kivo.module.build_index()
+    kivo.pgconf = slurp_json("config/postgres.json")
 
 USAGE = """etl command [arguments] [<keyword-arguments>]"""
 def parse_options(kwargv):
@@ -58,6 +61,7 @@ def main():
         kivo.logging.setlevel(log,'debug')
     if options.trace:
         TRACE = True
+    configure()
     status,delta = dispatch(command,posargs,options)
     _status = 'OK' if status else 'FAILED'
     log.info("status = %s in %.3f sec" % (_status,delta))

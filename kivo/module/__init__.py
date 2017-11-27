@@ -1,12 +1,14 @@
 import os
+from ..logging import log
 from .core import Module
 from .util.misc import load_module_from, find_modules_under
+from . import index
 
 PATH = "./modules"
 INDEX = None
 
-def build_index(path):
-    pass
+def build_index(path=PATH):
+    log.debug('..')
 
 def load(name,path=PATH):
     # modpath = "%s/%s" % (path,name)
