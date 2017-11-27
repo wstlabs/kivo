@@ -40,14 +40,6 @@ def process_block(newcfg,block):
 def pivot_table(table,meta):
     pass
 
-def splitpath(srcpath):
-    if isinstance(srcpath,str):
-        terms = srcpath.split('.')
-        if len(terms) == 1:
-            return terms[0],None
-        if len(terms) == 2:
-            return tuple(terms)
-    raise ValueError("invalid source path [%s]" % srcpath)
 
 def _load_yaml(path):
     with open(path,"rtU") as f:
@@ -95,4 +87,12 @@ def __process(blocks):
     cfg['tables'] = recs2dict(table_recs_aug)
     return cfg
 
+def __splitpath(srcpath):
+    if isinstance(srcpath,str):
+        terms = srcpath.split('.')
+        if len(terms) == 1:
+            return terms[0],None
+        if len(terms) == 2:
+            return tuple(terms)
+    raise ValueError("invalid source path [%s]" % srcpath)
 
