@@ -14,5 +14,5 @@ class Module(object):
         for prefix,submap in self._srccfg['prefix'].items():
             # log.debug(f'prefix = {prefix}')
             for name in submap.keys():
-                yield f'{prefix}.{name}'
+                yield prefix,name
 
