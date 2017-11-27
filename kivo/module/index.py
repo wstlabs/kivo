@@ -6,6 +6,7 @@ from .util.misc import find_modules_under, load_module_from
 INDEX = None
 
 def build(path):
+    global INDEX
     log.debug('..')
     names = list(find_modules_under(path))
     log.debug('that be %d modules' % len(names))
@@ -14,9 +15,19 @@ def build(path):
     log.debug(f'index = {INDEX}')
     log.debug('index len = %d' % len(INDEX))
     for t in INDEX.tables():
-        m = INDEX.lookup(*t)
-        r = INDEX.info(*t)
+        m = INDEX.resolve(*t)
+        r = INDEX.lookup(*t)
         log.debug(f'table = {t} => {m.name} => {r}')
+    log.debug(f'finally: index = {INDEX}')
+
+def lookup(prefix,name):
+    global INDEX
+    log.debug(f'{prefix}.{name}')
+    log.debug(f'index = {INDEX}')
+    if INDEX is None:
+        raise RuntimeError("invalid usage - module index not initialized")
+    return INDEX.lookup(prefix,name)
+
 
 class ModuleIndex(object):
     """
@@ -48,13 +59,14 @@ class ModuleIndex(object):
                 raise ValueError("duplicate tablespec {prefix}.{name} detected")
             self._map[prefix][name] = kivomod
 
-    def lookup(self,prefix,name):
+    def resolve(self,prefix,name):
         d = self._map.get(prefix)
         if d is not None:
             return d.get(name)
 
-    def info(self,prefix,name):
-        m = self.lookup(prefix,name)
+    def lookup(self,prefix,name):
+        log.debug(f'{prefix}.{name}')
+        m = self.resolve(prefix,name)
         if m is not None:
             return m.info(prefix,name)
 
