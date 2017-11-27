@@ -22,13 +22,6 @@ HANDLERS = {
 }
 
 
-def __perform(posargs=None,options=None):
-    log.debug("posargs=%s, options=%s" % (posargs,options))
-    if len(posargs) == 1:
-        return exec_source(load_source_named,posargs)
-    else:
-        raise ValueError("invalid usage")
-
 @timedsingle
 def load_source_named(prefix,name):
     _stage = theStage
@@ -84,4 +77,12 @@ def __load_multi(prefix,names,strict=True):
         if strict and not status:
             return False
     return True
+
+def __perform(posargs=None,options=None):
+    log.debug("posargs=%s, options=%s" % (posargs,options))
+    if len(posargs) == 1:
+        return exec_source(load_source_named,posargs)
+    else:
+        raise ValueError("invalid usage")
+
 
