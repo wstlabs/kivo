@@ -4,6 +4,7 @@ from copy import deepcopy
 from ...logging import log
 import yaml
 
+# Default key-value lookups applied to every leaf record in our source config. 
 DEFAULTS = {'active':True}
 
 def load(modpath):
@@ -31,7 +32,7 @@ def process_block(newcfg,block):
     t = newcfg['prefix'][prefix]
     for table in block['tables']:
         log.debug(f'table = {table}')
-        r = deepcopy(table)
+        r = augment(table,DEFAULTS)
         name = r['name']
         del r['name']
         r['family'] = family
