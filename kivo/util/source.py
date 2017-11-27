@@ -5,7 +5,7 @@ import yaml
 
 DEFAULTS = {'active':True}
 
-def splitpath(srcpath):
+def split_table_spec(srcpath):
     if isinstance(srcpath,str):
         terms = srcpath.split('.')
         if len(terms) == 1:
@@ -13,6 +13,8 @@ def splitpath(srcpath):
         if len(terms) == 2:
             return tuple(terms)
     raise ValueError("invalid source path [%s]" % srcpath)
+
+splitpath = split_table_spec
 
 def tablename(schema,prefix,name):
     _prefix = prefix.replace('-','_')
