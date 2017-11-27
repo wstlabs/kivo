@@ -11,3 +11,6 @@ def load(name,path=PATH):
 def find(dirpath=PATH):
     return find_modules_under(dirpath)
 
+def info(prefix,name):
+    return None
+

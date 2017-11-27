@@ -31,7 +31,10 @@ def pull_module(modulename):
 @timedsingle
 def pull_source_canon(prefix,name):
     log.debug(f'prefix = {prefix}, name = {name}')
-    if not source.getval(prefix,name,'active'):
+    r = module.info(prefix,name)
+    if r is None:
+        raise ValueError("invalid source")
+    if not r.getval(prefix,name,'active'):
         raise ValueError("source inactive by configuration")
     command = make_pull_command(prefix,name)
     print(command)
