@@ -16,3 +16,8 @@ class Module(object):
             for name in submap.keys():
                 yield prefix,name
 
+    def info(self,prefix,name):
+        d = self._srccfg.get(prefix)
+        log.debug(f'prefix = {prefix} => {d}')
+        if d is not None:
+            return d.get(name)
