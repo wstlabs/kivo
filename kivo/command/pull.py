@@ -5,6 +5,7 @@ from ..util.pull import make_pull_command
 from ..util.source import split_table_spec
 from .util.execute import exec_source
 from .. import stage
+from .. import module
 
 HANDLERS = {}
 
@@ -29,6 +30,7 @@ def pull_module(modulename):
 
 @timedsingle
 def pull_source_canon(prefix,name):
+    log.debug(f'prefix = {prefix}, name = {name}')
     if not source.getval(prefix,name,'active'):
         raise ValueError("source inactive by configuration")
     command = make_pull_command(prefix,name)

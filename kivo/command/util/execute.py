@@ -1,5 +1,5 @@
 from ...logging import log
-from ...util.source import splitpath, tablename
+from ...util.source import split_table_spec, tablename
 from ...decorators import timedsingle
 
 def extract_source(options):
@@ -58,17 +58,21 @@ def _exec_module(handler,module):
     return status
 
 def _exec_tablespec(handler,tablespec):
-    log.debug(f'tablespec = {tablespec}')
-    raise RuntimeError("not finished")
+    log.info(f'tablespec = {tablespec}')
+    status,delta = handler(tablespec)
+    _status = 'OK' if status else 'FAIL'
+    log.info("tablespec = '%s' - status = %s in %.3f sec" % (tablespec,_status,delta))
+    return status
+
+def __exec_tablespec(handler,tablespec):
     if '.' in tablespec:
-        srcpath = tablespec
-        log.debug(f'srcpath = {srcpath}')
+        prefix, name = split_table_spec(tablespec)
+        log.debug(f'prefix = {prefix}, name = {name}')
         raise RuntimeError("not finished")
         # prefix,name = splitpath(srcpath)
         # log.debug(f'name = {name}')
         # return exec_src_multi(handler,prefix,[name])
     else:
-        prefix = srcarg
         raise RuntimeError("not finished")
         # log.debug(f'prefix = {prefix}')
         # names = source.select(prefix,{'active':True})
