@@ -7,7 +7,7 @@ from . import index
 PATH = "./modules"
 INDEX = None
 
-def build_index(path=PATH):
+def setup(path=PATH):
     log.debug('..')
 
 def load(name,path=PATH):

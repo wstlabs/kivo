@@ -11,7 +11,7 @@ TRACE = False # for noisy exception tracing
 
 def configure():
     log.debug('..')
-    kivo.module.build_index()
+    kivo.module.setup()
     kivo.pgconf = slurp_json("config/postgres.json")
 
 USAGE = """etl command [arguments] [<keyword-arguments>]"""
