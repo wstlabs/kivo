@@ -7,6 +7,8 @@ def build(path):
     log.debug('..')
     modules = list(find_modules_under(path))
     log.debug('that be %d modules' % len(modules))
+    INDEX = ModuleIndex(modules)
+    log.debug(f'index = {INDEX}')
 
 class ModuleIndex(object):
     """
