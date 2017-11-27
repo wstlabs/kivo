@@ -3,7 +3,6 @@ from copy import deepcopy
 from ..logging import log
 import yaml
 
-DEFAULTS = {'active':True}
 
 def split_table_spec(srcpath):
     if isinstance(srcpath,str):
@@ -31,6 +30,8 @@ def source2prefix(srcpath):
 #
 # DEPRECATED
 #
+
+__DEFAULTS = {'active':True}
 
 def ___load_yaml(path):
     with open(path,"rtU") as f:
