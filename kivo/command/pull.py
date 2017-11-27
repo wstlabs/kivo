@@ -26,6 +26,11 @@ def assert_loadable(prefix,name,infile):
     if not os.path.exists(infile):
         raise RuntimeError("can't find infile '%s'" % infile)
 
+
+#
+# DEPRECATED
+#
+
 def __perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     if len(posargs) == 1:
