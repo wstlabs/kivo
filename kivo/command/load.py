@@ -14,6 +14,13 @@ def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     return exec_source(HANDLERS,posargs,options)
 
+@timedsingle
+def load_tablespec(tablespec):
+    prefix,name = split_table_spec(tablespec)
+    log.debug(f'prefix = {prefix}, name = {name}')
+    delta,status = load_source_canon(prefix,name)
+    return status
+
 
 HANDLERS = {
    'table':load_tablespec,
@@ -21,9 +28,8 @@ HANDLERS = {
    'module':load_module
 }
 
-
 @timedsingle
-def load_source_named(prefix,name):
+def load_source_canon(prefix,name):
     _stage = theStage
     log.debug(f'stage = {_stage}')
     log.debug(f'source = {prefix}.{name}')
