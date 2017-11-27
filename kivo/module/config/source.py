@@ -37,10 +37,6 @@ def process_block(newcfg,block):
         d['family'] = family
         t[name] = d
 
-def pivot_table(table,meta):
-    pass
-
-
 def _load_yaml(path):
     with open(path,"rtU") as f:
         return yaml.load(f)
@@ -52,7 +48,6 @@ def augment(r,d):
         if k not in rr:
             rr[k] = deepcopy(v)
     return rr
-
 
 def recs2dict(recs):
     d = OrderedDict()
