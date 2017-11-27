@@ -3,7 +3,7 @@ from collections import OrderedDict
 from ..logging import log
 
 ROOTDIR = '/opt/stage'
-PHASERANK = OrderedDict([('special',4),('extracted',3),('unpack',2),('incoming',1),('proto',0)])
+PHASERANK = OrderedDict([('special',4),('extract',3),('unpack',2),('incoming',1),('proto',0)])
 
 class Stage(object):
 
@@ -38,7 +38,7 @@ class Stage(object):
     def latest(self,prefix,name):
         for phase in PHASERANK.keys():
             _filepath = self.filepath(phase,prefix,name)
-            # print("%s.%s:%s -> %s" % (prefix,name,phase,_filepath))
+            log.debug("%s.%s:%s -> %s" % (prefix,name,phase,_filepath))
             if os.path.exists(_filepath):
                 return _filepath
         return None
