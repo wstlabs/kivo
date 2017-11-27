@@ -26,6 +26,13 @@ def assert_loadable(prefix,name,infile):
     if not os.path.exists(infile):
         raise RuntimeError("can't find infile '%s'" % infile)
 
+HANDLERS = {
+    'module':pull_module,
+    'table':pull_tablespec
+}
+
+
+
 
 #
 # DEPRECATED
