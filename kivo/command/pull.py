@@ -13,7 +13,19 @@ def perform(posargs=None,options=None):
     return exec_source(HANDLERS,posargs,options)
 
 @timedsingle
-def pull_source_named(prefix,name):
+def pull_tablespec(tablespec):
+    raise NotImplementedError("not yet")
+
+@timedsingle
+def pull_prefix(prefix):
+    raise NotImplementedError("not yet")
+
+@timedsingle
+def pull_module(modulename):
+    raise NotImplementedError("not yet")
+
+@timedsingle
+def pull_source_canon(prefix,name):
     if not source.getval(prefix,name,'active'):
         raise ValueError("source inactive by configuration")
     command = make_pull_command(prefix,name)
@@ -27,8 +39,9 @@ def assert_loadable(prefix,name,infile):
         raise RuntimeError("can't find infile '%s'" % infile)
 
 HANDLERS = {
-    'module':pull_module,
-    'table':pull_tablespec
+    'table':pull_tablespec,
+    'prefix':pull_prefix,
+    'module':pull_module
 }
 
 
