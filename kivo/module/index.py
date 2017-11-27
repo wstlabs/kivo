@@ -9,6 +9,7 @@ def build(path):
     log.debug('that be %d modules' % len(modules))
     INDEX = ModuleIndex(modules)
     log.debug(f'index = {INDEX}')
+    log.debug('index len = %d' % len(INDEX))
 
 class ModuleIndex(object):
     """
@@ -18,11 +19,16 @@ class ModuleIndex(object):
     """
 
     def __init__(self,modules):
+        self.count = 0
         self.ingest(modules)
+
+    def __len__(self):
+        return self.count
 
     def ingest(self,modules):
         for m in modules:
             self.add(m)
+            self.count += 1
 
     def add(self,kivomod):
         pass
