@@ -17,7 +17,8 @@ class Module(object):
                 yield prefix,name
 
     def info(self,prefix,name):
-        d = self._srccfg.get(prefix)
-        log.debug(f'prefix = {prefix} => {d}')
+        d = self._srccfg['prefix'].get(prefix)
+        # log.debug(f'prefix = {prefix} => {d}')
+        # log.debug(f'srccfg = {self._srccfg}')
         if d is not None:
             return d.get(name)
