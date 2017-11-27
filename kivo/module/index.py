@@ -1,7 +1,12 @@
 from ..logging import log
+from .util.misc import find_modules_under
+
+INDEX = None
 
 def build(path):
-    pass
+    log.debug('..')
+    modules = list(find_modules_under(path))
+    log.debug('that be %d modules' % len(modules))
 
 class ModuleIndex(object):
     """

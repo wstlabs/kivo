@@ -5,10 +5,10 @@ from .util.misc import load_module_from, find_modules_under
 from . import index
 
 PATH = "./modules"
-INDEX = None
 
 def setup(path=PATH):
     log.debug('..')
+    index.build(path)
 
 def load(name,path=PATH):
     # modpath = "%s/%s" % (path,name)
