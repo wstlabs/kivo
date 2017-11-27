@@ -38,7 +38,8 @@ def pull_source_canon(prefix,name):
     active = r.get('active')
     if not active:
         raise ValueError("source inactive by configuration")
-    command = make_pull_command(prefix,name)
+    tspec = (prefix,name,None)
+    command = make_pull_command(tspec,r)
     print(command)
     return True
 

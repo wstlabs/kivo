@@ -1,14 +1,17 @@
 from .. import stage
 
-def make_url(slug):
-    template = "https://data.cityofnewyork.us/api/views/%s/rows.csv?accessType=DOWNLOAD"
-    return template % slug
+def make_url(tspec,r):
+    prefix,name,segment = tspec
+    srckey = r.get('srckey')
+    if srckey is None:
+        raise ValueError(f'invlid config for {prefix}.{name} - no srckey')
+    return f'https://data.cityofnewyork.us/api/views/{srckey}/rows.csv?accessType=DOWNLOAD'
 
-def make_pull_command(prefix,name,segment=None):
+def make_pull_command(tspec,r):
+    prefix,name,segment = tspec
     if segment is not None:
         raise NotImplementedError("segments not supported in this operation")
-    slug  = source.getval(prefix,name,'slug',strict=True)
-    url   = make_url(slug)
+    url = make_url(tspec,r)
     destfile = stage.mkpath('incoming',prefix,name,autoviv=True)
     return "curl -o %s '%s'" % (destfile,url)
 
