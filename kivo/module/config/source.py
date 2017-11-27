@@ -31,11 +31,11 @@ def process_block(newcfg,block):
     t = newcfg['prefix'][prefix]
     for table in block['tables']:
         log.debug(f'table = {table}')
-        d = deepcopy(table)
-        name = d['name']
-        del d['name']
-        d['family'] = family
-        t[name] = d
+        r = deepcopy(table)
+        name = r['name']
+        del r['name']
+        r['family'] = family
+        t[name] = r 
 
 def _load_yaml(path):
     with open(path,"rtU") as f:
