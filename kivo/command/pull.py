@@ -6,7 +6,13 @@ from ..util.source import splitpath
 from .. import source
 from .. import stage
 
+HANDLERS = {}
+
 def perform(posargs=None,options=None):
+    log.debug("posargs=%s, options=%s" % (posargs,options))
+    return exec_source(HANDLERS,posargs,options)
+
+def __perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     if len(posargs) == 1:
         return exec_any(posargs[0])
