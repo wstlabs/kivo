@@ -3,7 +3,7 @@ from collections import OrderedDict
 from ..logging import log
 
 ROOTDIR = '/opt/stage'
-PHASERANK = OrderedDict([('special',4),('xtracted',3),('unpack',2),('incoming',1),('proto',0)])
+PHASERANK = OrderedDict([('special',4),('extracted',3),('unpack',2),('incoming',1),('proto',0)])
 
 class Stage(object):
 
