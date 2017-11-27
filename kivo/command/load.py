@@ -21,6 +21,14 @@ def load_tablespec(tablespec):
     delta,status = load_source_canon(prefix,name)
     return status
 
+@timedsingle
+def load_prefix(prefix):
+    raise NotImplementedError("not yet")
+
+@timedsingle
+def load_module(modulename):
+    raise NotImplementedError("not yet")
+
 
 HANDLERS = {
    'table':load_tablespec,
