@@ -3,6 +3,7 @@ from ..logging import log
 from ..decorators import timedsingle
 from ..util.pull import make_pull_command
 from ..util.source import split_table_spec
+from .util.execute import exec_source
 from .. import stage
 
 HANDLERS = {}
