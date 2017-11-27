@@ -49,27 +49,6 @@ def augment(r,d):
             rr[k] = deepcopy(v)
     return rr
 
-def recs2dict(recs):
-    d = OrderedDict()
-    for r in recs:
-        name = r['name']
-        del r['name']
-        if name in d:
-            raise ValueError("invalid configuration - duplicated source name '%s' detected" % name)
-        d[name] = deepcopy(r)
-    return d
-
-def tablename(schema,prefix,name):
-    _prefix = prefix.replace('-','_')
-    _name = name.replace('-','_')
-    return "%s.%s_%s" % (schema,_prefix,_name)
-
-def source2prefix(srcpath):
-    terms = srcpath.split('.')
-    if len(terms) > 1:
-        return terms[0]
-    raise ValueError("invalid source path [%s]" % srcpath)
-
 
 #
 # DEPRECATED
@@ -90,4 +69,26 @@ def __splitpath(srcpath):
         if len(terms) == 2:
             return tuple(terms)
     raise ValueError("invalid source path [%s]" % srcpath)
+
+def __tablename(schema,prefix,name):
+    _prefix = prefix.replace('-','_')
+    _name = name.replace('-','_')
+    return "%s.%s_%s" % (schema,_prefix,_name)
+
+def __source2prefix(srcpath):
+    terms = srcpath.split('.')
+    if len(terms) > 1:
+        return terms[0]
+    raise ValueError("invalid source path [%s]" % srcpath)
+
+def __recs2dict(recs):
+    d = OrderedDict()
+    for r in recs:
+        name = r['name']
+        del r['name']
+        if name in d:
+            raise ValueError("invalid configuration - duplicated source name '%s' detected" % name)
+        d[name] = deepcopy(r)
+    return d
+
 
