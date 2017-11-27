@@ -1,7 +1,7 @@
 import os
 import kivo
 from ..logging import log
-from ..util.source import splitpath, tablename
+from ..util.source import split_table_spec, tablename
 from ..util.load import make_copy_command
 from ..shell import dopsql
 from ..decorators import timedsingle
@@ -44,8 +44,8 @@ def load_source_canon(prefix,name):
     infile = _stage.latest(prefix,name)
     log.info("infile = '%s'" % infile)
     assert_loadable(prefix,name,infile)
-    if not permit_loadable(prefix,name):
-        raise ValueError("source inactive by configuration")
+    # if not permit_loadable(prefix,name):
+    #    raise ValueError("source inactive by configuration")
     table = tablename('t0',prefix,name)
     log.info("table = '%s'" % table)
     psql = make_copy_command(table,infile)
