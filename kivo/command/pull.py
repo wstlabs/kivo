@@ -19,7 +19,7 @@ def __perform(posargs=None,options=None):
     else:
         raise ValueError("invalid usage")
 
-def exec_any(srcarg,strict=True):
+def __exec_any(srcarg,strict=True):
     if '.' in srcarg:
         srcpath = srcarg
         prefix,name = splitpath(srcpath)
@@ -29,7 +29,7 @@ def exec_any(srcarg,strict=True):
         names = source.select(prefix,{'active':True})
         return exec_multi(prefix,names,strict)
 
-def exec_multi(prefix,names,strict=True):
+def __exec_multi(prefix,names,strict=True):
     """Load multiple named sourcs under a given prefix."""
     log.debug("names = %s" % names)
     for name in names:
