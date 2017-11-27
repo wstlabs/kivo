@@ -14,6 +14,22 @@ def splitpath(srcpath):
             return tuple(terms)
     raise ValueError("invalid source path [%s]" % srcpath)
 
+def tablename(schema,prefix,name):
+    _prefix = prefix.replace('-','_')
+    _name = name.replace('-','_')
+    return "%s.%s_%s" % (schema,_prefix,_name)
+
+def source2prefix(srcpath):
+    terms = srcpath.split('.')
+    if len(terms) > 1:
+        return terms[0]
+    raise ValueError("invalid source path [%s]" % srcpath)
+
+
+#
+# DEPRECATED
+#
+
 def ___load_yaml(path):
     with open(path,"rtU") as f:
         return yaml.load(f)
@@ -48,15 +64,4 @@ def __loadcfg_source(path):
     log.debug(f'path = {path}')
     cfg = load_and_augment(path)
     return cfg
-
-def tablename(schema,prefix,name):
-    _prefix = prefix.replace('-','_')
-    _name = name.replace('-','_')
-    return "%s.%s_%s" % (schema,_prefix,_name)
-
-def source2prefix(srcpath):
-    terms = srcpath.split('.')
-    if len(terms) > 1:
-        return terms[0]
-    raise ValueError("invalid source path [%s]" % srcpath)
 
