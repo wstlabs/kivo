@@ -8,7 +8,14 @@ from ..decorators import timedsingle
 from ..stage import theStage
 from .util.execute import exec_other, exec_source
 
+HANDLERS = {}
+
 def perform(posargs=None,options=None):
+    log.debug("posargs=%s, options=%s" % (posargs,options))
+    return exec_source(HANDLERS,posargs,options)
+
+
+def __perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     if len(posargs) == 1:
         return exec_source(load_source_named,posargs)
