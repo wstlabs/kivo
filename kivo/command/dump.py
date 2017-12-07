@@ -1,4 +1,5 @@
 import os
+import kivo
 from ..logging import log
 from ..decorators import timedsingle
 from ..util.source import splitpath, tablename
