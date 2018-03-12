@@ -14,11 +14,13 @@ def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     return exec_source(HANDLERS,posargs,options)
 
+"""
 @timedsingle
-def load_tablespec(tablespec):
-    prefix,name = split_table_spec(tablespec)
-    log.debug(f'prefix = {prefix}, name = {name}')
-    delta,status = load_source_canon(prefix,name)
+def __load_tablespec(tablespec):
+    # prefix,name = split_table_spec(tablespec)
+    # log.debug(f'prefix = {prefix}, name = {name}')
+    name = verify_simple(tablespec)
+    delta,status = load_source_simple(name)
     return status
 
 @timedsingle
@@ -28,14 +30,31 @@ def load_prefix(prefix):
 @timedsingle
 def load_module(modulename):
     raise NotImplementedError("not yet")
+"""
 
+# 'prefix':load_prefix,
+# 'module':load_module
+
+@timedsingle
+def load_table(name):
+    _stage = theStage
+    log.debug(f'stage = {_stage}')
+    log.info(f'name = {name}')
+    infile = _stage.latest(name)
+    log.info("infile = '%s'" % infile)
+    assert_loadable(name,infile)
+    table = tablename('t0',name)
+    log.info("table = '%s'" % table)
+    psql = make_copy_command(table,infile)
+    log.debug("psql = [%s]" % psql)
+    return dopsql(psql,kivo.pgconf)
 
 HANDLERS = {
-   'table':load_tablespec,
-   'prefix':load_prefix,
-   'module':load_module
+   'table':load_table
 }
 
+# DEPRECATED
+"""
 @timedsingle
 def load_source_canon(prefix,name):
     _stage = theStage
@@ -51,15 +70,24 @@ def load_source_canon(prefix,name):
     psql = make_copy_command(table,infile)
     log.debug("psql = [%s]" % psql)
     return dopsql(psql,kivo.pgconf)
+"""
 
+"""
 def permit_loadable(prefix,name):
-    """A simpe abstracted perms check which allows us to override config settings
-    for certain special sources."""
+    ---A simpe abstracted perms check which allows us to override config settings
+    for certain special sources.---
     if prefix in ('temp','norm'):
         return True
     return source.getval(prefix,name,'active')
+"""
 
-def assert_loadable(prefix,name,infile):
+def assert_loadable(tablename,infile):
+    if infile is None:
+        raise RuntimeError("no loadable file for tablename ='%s'" % (tablename))
+    if not os.path.exists(infile):
+        raise RuntimeError("can't find infile '%s'" % infile)
+
+def __assert_loadable(prefix,name,infile):
     if infile is None:
         raise RuntimeError("no loadable file for prefix = '%s', name ='%s'" % (prefix,name))
     if not os.path.exists(infile):

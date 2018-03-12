@@ -41,9 +41,11 @@ def dump_source_named(prefix,name,force=False):
     # if not source.exists(prefix):
     #    raise ValueError("unrecognized source group '%s'")
     # XXX at this point, we should be checking for relation existence as well.
-    table = tablename('norm',prefix,name)
+    # table = tablename('norm',prefix,name)
+    table = tablename('norm',name)
     log.info("table = '%s'" % table)
-    outfile = theStage.mkpath('export',prefix,name,autoviv=True)
+    # outfile = theStage.mkpath('export',prefix,name,autoviv=True)
+    outfile = theStage.mkpath('export',name,autoviv=True)
     log.info("outfile = '%s'" % outfile)
     if not force and os.path.exists(outfile):
         message = "cowardly refusing to overwrite existing outfile '%s' without --force option"

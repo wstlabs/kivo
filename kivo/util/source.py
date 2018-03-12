@@ -1,3 +1,4 @@
+import re
 from collections import OrderedDict
 from copy import deepcopy
 from ..logging import log
@@ -5,6 +6,7 @@ import yaml
 
 
 def split_table_spec(srcpath):
+    # raise RuntimeError("deprecated")
     if isinstance(srcpath,str):
         terms = srcpath.split('.')
         if len(terms) == 1:
@@ -15,8 +17,19 @@ def split_table_spec(srcpath):
 
 splitpath = split_table_spec
 
-def tablename(schema,prefix,name):
-    _prefix = prefix.replace('-','_')
+PAT = {}
+PAT['tablespec'] = re.compile('^[\w\-]+$')
+def is_valid_tablespec(tablespec):
+    return bool(re.match(PAT['tablespec'],tablespec))
+
+# def tablename(schema='public',prefix=None,name):
+def tablename(schema='public',tablespec=None):
+    assert is_valid_tablespec(tablespec)
+    tablename = tablespec.replace('-','_')
+    return "%s.%s" % (schema,tablename)
+
+def __tablename(schema='public',prefix=None,name=None):
+    _prefix = prefix.replace('-','_') if prefix else None
     _name = name.replace('-','_')
     return "%s.%s_%s" % (schema,_prefix,_name)
 
