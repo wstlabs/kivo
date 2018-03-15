@@ -10,4 +10,4 @@
 # It's a bit brittle at present, but works for the intended use case, provided
 # you run it from the standard working directory (i.e. the directory above this one).
 #
-python bin/runpg.py $@
+python3 bin/runpg.py $@
