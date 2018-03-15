@@ -5,7 +5,6 @@ from . import load
 from . import pull
 from . import dump
 from . import check
-from ..special import match
 
 def command2module(command):
     """
