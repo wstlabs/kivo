@@ -9,7 +9,10 @@ def invoke(command):
 
 def make_psql_command(statement,pgconf):
     quoted = '"'+statement+'"'
+    hostname = pgconf.get('hostname')
+    hostflag = " -h %s" % hostname if hostname else ''
     flags = "-U %(user)s -d %(dbname)s" % pgconf
+    flags += hostflag
     return "psql %s -c %s" % (flags,quoted)
 
 def dopsql(statement,pgconf):
