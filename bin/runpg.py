@@ -13,11 +13,15 @@ pgargs = sys.argv[1:]
 
 configpath = "config/postgres.json"
 pgconf = json.loads(open(configpath,"r").read())
-    
+hostname = pgconf.get('hostname')
+
 # print("pgconf = ",pgconf)
 # print("pgargs = ",pgargs)
 
-flags = "-U %(user)s -d %(dbname)s" % pgconf
+hostflag = " -h %s" % hostname if hostname else ''
+flags = "-U %(user)s -d %(dbname)s " % pgconf
+flags += hostflag
+
 command = "psql %s %s" % (flags,' '.join(pgargs))
 print("EXEC: %s" % command)
 call(command,shell=True)
