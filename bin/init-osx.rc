@@ -2,5 +2,5 @@
 # one important setting (prefixed by DYLD) to keep shared libraries from crashing
 export PGROOT=/opt/pg9
 export PGDATA=$PGROOT/data
-export $PGROOT/bin:$PATH
+export PATH=$PGROOT/bin:$PATH
 export DYLD_FALLBACK_LIBRARY_PATH=$PGROOT/lib
