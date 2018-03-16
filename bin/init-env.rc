@@ -1,2 +1,2 @@
 export DWROOT=/opt/build/kivo
-export PATH=$DWROOT/bin
+export PATH=$DWROOT/bin:$PATH
