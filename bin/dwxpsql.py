@@ -6,13 +6,18 @@
 #
 # TODO: explain args + volatility
 #
+import os
 import sys
 import simplejson as json
 from subprocess import call
 
+DWROOT = os.environ['DWROOT']
+if DWROOT is None:
+    raise RuntimeError("bad environment setup - no DWROOT variable set")
+
 pgargs = sys.argv[1:]
 
-configpath = "config/postgres.json"
+configpath = f"{DWROOT}/config/postgres.json"
 pgconf = json.loads(open(configpath,"r").read())
 hostname = pgconf.get('hostname')
 
