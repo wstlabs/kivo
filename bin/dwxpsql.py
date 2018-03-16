@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.6
 #
 # A simple argument packer for the standard psql client. 
 # Assumes we'll be using the 'writeuser', whose password has been
