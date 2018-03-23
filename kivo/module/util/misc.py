@@ -19,7 +19,7 @@ def load_module_from(path,name):
 def find_modules_under(basedir):
     """Returns a geneator which yields a sequence of (apparently) valid kivo modules under the given basedir."""
     if not os.path.isdir(basedir):
-        raise ValueError("invalid module directory path (not a directory)")
+        raise ValueError(f"invalid module directory path '{basedir}' (not a directory)")
     subdirs = os.scandir(basedir)
     module_names_possible = (_.name for _ in subdirs)
     module_names_valid = (_ for _ in module_names_possible if is_module_name(_))
