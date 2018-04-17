@@ -10,8 +10,7 @@ HANDLERS = {}
 
 def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
-    # return exec_source(HANDLERS,posargs,options)
-    return refresh_matview(posargs[0]) 
+    return refresh_matview(posargs[0])
 
 @timedsingle
 def refresh_matview(name):
