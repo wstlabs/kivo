@@ -4,6 +4,7 @@ from . import list_
 from . import load
 from . import pull
 from . import dump
+from . import refresh
 from . import check
 
 def command2module(command):
