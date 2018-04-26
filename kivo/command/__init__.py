@@ -6,6 +6,7 @@ from . import pull
 from . import dump
 from . import refresh
 from . import check
+from . import truncate
 
 def command2module(command):
     """
