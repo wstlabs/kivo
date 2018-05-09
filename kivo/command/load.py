@@ -14,27 +14,6 @@ def perform(posargs=None,options=None):
     log.debug("posargs=%s, options=%s" % (posargs,options))
     return exec_source(HANDLERS,posargs,options)
 
-"""
-@timedsingle
-def __load_tablespec(tablespec):
-    # prefix,name = split_table_spec(tablespec)
-    # log.debug(f'prefix = {prefix}, name = {name}')
-    name = verify_simple(tablespec)
-    delta,status = load_source_simple(name)
-    return status
-
-@timedsingle
-def load_prefix(prefix):
-    raise NotImplementedError("not yet")
-
-@timedsingle
-def load_module(modulename):
-    raise NotImplementedError("not yet")
-"""
-
-# 'prefix':load_prefix,
-# 'module':load_module
-
 @timedsingle
 def load_table(name):
     _stage = theStage
@@ -61,6 +40,25 @@ def assert_loadable(tablename,infile):
 
 
 # DEPRECATED
+
+"""
+@timedsingle
+def __load_tablespec(tablespec):
+    # prefix,name = split_table_spec(tablespec)
+    # log.debug(f'prefix = {prefix}, name = {name}')
+    name = verify_simple(tablespec)
+    delta,status = load_source_simple(name)
+    return status
+
+@timedsingle
+def load_prefix(prefix):
+    raise NotImplementedError("not yet")
+
+@timedsingle
+def load_module(modulename):
+    raise NotImplementedError("not yet")
+"""
+
 """
 @timedsingle
 def load_source_canon(prefix,name):
