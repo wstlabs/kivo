@@ -53,6 +53,13 @@ HANDLERS = {
    'table':load_table
 }
 
+def assert_loadable(tablename,infile):
+    if infile is None:
+        raise RuntimeError("no loadable file for tablename ='%s'" % (tablename))
+    if not os.path.exists(infile):
+        raise RuntimeError("can't find infile '%s'" % infile)
+
+
 # DEPRECATED
 """
 @timedsingle
@@ -80,12 +87,6 @@ def permit_loadable(prefix,name):
         return True
     return source.getval(prefix,name,'active')
 """
-
-def assert_loadable(tablename,infile):
-    if infile is None:
-        raise RuntimeError("no loadable file for tablename ='%s'" % (tablename))
-    if not os.path.exists(infile):
-        raise RuntimeError("can't find infile '%s'" % infile)
 
 def __assert_loadable(prefix,name,infile):
     if infile is None:
