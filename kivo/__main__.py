@@ -6,11 +6,14 @@ from .command import resolve
 from .util.io import slurp_json
 from .util.argparse import splitargv
 from .decorators import timedsingle
+import os
 
-TRACE = False # for noisy exception tracing
+# set to True for noisy exception tracing
+TRACE = False
 
 def configure():
     log.debug('..')
+    print ('HEY cwd = ',os.getcwd())
     kivo.module.setup()
     kivo.pgconf = slurp_json("config/postgres.json")
 
