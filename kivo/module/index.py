@@ -65,7 +65,7 @@ class ModuleIndex(object):
             return d.get(name)
 
     def lookup(self,prefix,name):
-        log.debug(f'{prefix}.{name}')
+        # log.debug(f'{prefix}.{name}')
         m = self.resolve(prefix,name)
         if m is not None:
             return m.info(prefix,name)
