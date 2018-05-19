@@ -4,7 +4,9 @@ from .core import Module
 from .util.misc import load_module_from, find_modules_under
 from . import index
 
-PATH = "./modules"
+# module path relative to the application root
+# see init_app_root()
+PATH = "modules"
 
 def setup(path=PATH):
     log.debug('..')

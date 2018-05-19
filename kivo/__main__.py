@@ -11,9 +11,27 @@ import os
 # set to True for noisy exception tracing
 TRACE = False
 
+def getenv_strict(tag):
+    value = os.getenv(tag)
+    if value is None:
+        raise RuntimeError(f"invalid configuration - environment variable '{tag}' not set")
+    return value
+
+def init_app_root(approot=None):
+    """
+    Sets the application root directory, under which we expect to find subdirectories for
+    config files, modules, and logging.  If a path is supplied (via :approot) we set to that;
+    otherwise we look for the environment variable DWXROOT.
+    """
+    if approot is None:
+        approot = getenv_strict('DWXROOT')
+    if not os.path.isdir(approot):
+        raise RuntimeError(f"could not find application root '{approot}'")
+    os.chdir(approot)
+
 def configure():
     log.debug('..')
-    print ('HEY cwd = ',os.getcwd())
+    init_app_root();
     kivo.module.setup()
     kivo.pgconf = slurp_json("config/postgres.json")
 
