@@ -13,7 +13,7 @@ from subprocess import call
 
 APPROOT = os.environ.get('DWXROOT')
 if APPROOT is None:
-    raise RuntimeError("bad environment setup - no DWROOT variable set")
+    raise RuntimeError("bad environment setup - no DWXROOT variable set")
 
 pgargs = sys.argv[1:]
 
