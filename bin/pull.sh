@@ -17,5 +17,5 @@ check_args () {
 check_args $@
 source=$1
 version=$2
-python3.6 -m kivo.app.pull --name=$source --month=$version
+python3.6 -m kivo.app.pull --source=$source --month=$version
 
