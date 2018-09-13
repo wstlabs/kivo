@@ -4,10 +4,9 @@ import subprocess
 from collections import OrderedDict
 import ioany
 from ..logging import log
-from ..util.mkdir import mkdir_from_base
+import kivo.fcache
 
 
-ROOT='/opt/journal'
 LOGDIR='log'
 
 """
@@ -19,10 +18,11 @@ time curl -o /opt/journal/monthly/acris-personal-legal/1-incoming/2018-09.csv \
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--name", type=str, required=True, help="source name")
+    parser.add_argument("--source", type=str, required=True, help="source name")
     g = parser.add_mutually_exclusive_group()
     g.add_argument("--month", type=str, required=False, help="monthly version tag")
     g.add_argument("--year", type=str, required=False, help="yearly version tag")
+    parser.add_argument("--dry", action="store_true")
     args = parser.parse_args()
     if args.month is not None:
         args.family = 'monthly'
@@ -32,33 +32,26 @@ def parse_args():
         args.version = args.year
     return args
 
-def make_dest_dir(family,name):
-    if not os.path.exists(ROOT):
-        assert RuntimeError("can't find journal root '{ROOT}', aborting")
-    subpath = f"{family}/{name}/1-incoming"
-    destdir = mkdir_from_base(ROOT,subpath)
-    return destdir
-
-def logfiles(name,version):
+def logfiles(source,version):
     pid = os.getpid()
-    logbase=f"{name}--{version}--{pid}"
+    logbase=f"{source}--{version}--{pid}"
     if not os.path.exists(LOGDIR):
         mkdir(LOGDIR)
     outfile=f"{LOGDIR}/err--{logbase}.txt"
     errfile=f"{LOGDIR}/out--{logbase}.txt"
     return outfile,errfile
 
-def curlargs(slug,name,family,version):
-    destdir = make_dest_dir(family,name)
-    destfile = f"{destdir}/{version}.csv"
+def curlargs(journal,slug,source,family,version):
+    phase = journal.trunk(family,source).phase(label='incoming',autoviv=True)
+    destfile = phase.fullpath(f"{version}.csv")
     log.info(f"destfile = {destfile}")
     target=f"https://data.cityofnewyork.us/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
     command = ['curl','-o',destfile,target]
-    outfile,errfile = logfiles(name,version)
+    outfile,errfile = logfiles(source,version)
     return command,outfile,errfile
 
-def execcurl(slug,name,family,version):
-    command,outfile,errfile = curlargs(slug,name,family,version)
+def docurl(journal,slug,source,family,version):
+    command,outfile,errfile = curlargs(journal,slug,source,family,version)
     log.info(f'command = {command}')
     subprocess.Popen(
         ['nohup','time'] + command,
@@ -76,13 +69,14 @@ def loadcfg(path):
 
 def main():
     args = parse_args()
-    name = args.name
+    source = args.source
     version = args.version
     cfg = loadcfg("config/socrata.csv")
-    slug = cfg[name]['slug']
+    slug = cfg[source]['slug']
     family = 'monthly'
-    log.info(f"name = {name}, family = {family}, version = {version}")
-    execcurl(slug,name,family,version)
+    log.info(f"source = {source}, family = {family}, version = {version}")
+    journal = kivo.fcache.journal.instance()
+    docurl(journal,slug,source,family,version)
     log.info("all done")
 
 
