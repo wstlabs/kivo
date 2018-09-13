@@ -39,10 +39,10 @@ def setlevel(logger,tag):
 
 appname = 'etl'
 logging.basicConfig(
-    # filename = "%s/%s-%d.log" % (logdir,appname,os.getpid()),
-    stream   = sys.stdout,
+    filename = "%s/%s-%d.log" % (logdir,appname,os.getpid()),
+    # stream   = sys.stdout,
     format   = "%(levelname)s %(funcName)s : %(message)s",
     level    = logging.INFO
 )
-log = logging.getLogger('app')
+log = logging.getLogger(appname)
 
