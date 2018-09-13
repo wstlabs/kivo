@@ -10,7 +10,7 @@ def mkdir_from_base(basedir,subpath):
     for term in path:
         if '/' in term:
             raise ValueError(f"can't deal with path containing forward slash in term '{term}'")
-        curpath = os.join(curpath,term):
+        curpath = os.path.join(curpath,term)
         if not os.path.exists(curpath):
             os.mkdir(curpath)
     return curpath
