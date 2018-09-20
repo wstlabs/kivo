@@ -36,7 +36,7 @@ def logfiles(source,version):
     pid = os.getpid()
     logbase=f"{source}--{version}--{pid}"
     if not os.path.exists(LOGDIR):
-        mkdir(LOGDIR)
+        os.mkdir(LOGDIR)
     outfile=f"{LOGDIR}/err--{logbase}.txt"
     errfile=f"{LOGDIR}/out--{logbase}.txt"
     return outfile,errfile
