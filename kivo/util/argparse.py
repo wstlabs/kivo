@@ -10,5 +10,7 @@ def kwindex(argv):
 def splitargv(argv):
     """Splits an argument vector into positional and keyword arguments."""
     i = kwindex(argv)
-    return argv[:i],argv[i:]
+    posargs = argv[:i]
+    kwargs  = argv[i:]
+    return posargs,kwargs
 
