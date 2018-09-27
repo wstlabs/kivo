@@ -4,33 +4,19 @@ import subprocess
 from collections import OrderedDict
 import ioany
 from ..logging import log
-from kivo.environment.manager import EnvironmentManager
+import kivo.fcache
 
 
 LOGDIR='log'
 
-"""
-time curl -o /opt/journal/monthly/acris-personal-legal/1-incoming/2018-09.csv \
-     'https://data.cityofnewyork.us/api/views/uqqa-hym2/rows.csv?accessType=DOWNLOAD' >
-          log/out-acris-personal-legal.log >& log/err-acris-personal-legal.log
-"""
-
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source", type=str, required=True, help="source name")
     g = parser.add_mutually_exclusive_group()
-    g.add_argument("--month", type=str, required=False, help="monthly version tag")
-    g.add_argument("--year", type=str, required=False, help="yearly version tag")
+    g.add_argument("--source", type=str, required=True, help="source name")
+    g.add_argument("--object", type=str, required=True, help="object name")
     parser.add_argument("--dry", action="store_true")
-    args = parser.parse_args()
-    if args.month is not None:
-        args.family = 'monthly'
-        args.version = args.month
-    if args.year is not None:
-        args.family = 'yearly'
-        args.version = args.year
-    return args
+    return parser.parse_args()
 
 def logfiles(source,version):
     pid = os.getpid()
@@ -71,15 +57,27 @@ def main():
     args = parse_args()
     source = args.source
     version = args.version
-    env = EnvironmentManager()
     cfg = loadcfg("config/socrata.csv")
     slug = cfg[source]['slug']
     family = 'monthly'
     log.info(f"source = {source}, family = {family}, version = {version}")
-    docurl(env.journal,slug,source,family,version)
+    journal = kivo.fcache.journal.instance()
+    docurl(journal,slug,source,family,version)
     log.info("all done")
 
 
 if __name__ == '__main__':
     main()
+
+from ..util.csvarg import make_csv_args
+
+"""
+We use the '(select % from ...)' construct so that the relation we pull
+from doesn't have to be table, as it would be if given as the direct argument
+to the COPY command.  Introduces a very slight performance overhead, but is
+vastly more flexible.
+"""
+def make_dump_command(table,outfile,char=','):
+    csvargs = make_csv_args(char)
+    return "\copy (select * from %s) TO %s %s;" % (table,outfile,csvargs)
 

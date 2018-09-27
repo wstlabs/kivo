@@ -6,7 +6,7 @@ def read(fname):
 
 setup(
     name = "kivo",
-    version = "0.0.5",
+    version = "0.1.0",
     author = "wstlabs",
     author_email = "wst@pobox.com",
     description = ("Modular ELT for elephants"),

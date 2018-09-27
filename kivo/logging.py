@@ -5,8 +5,13 @@ to make things easier to manage in the rest of the code base.
 import os
 import sys
 import logging
+from .config import resolve
+# from .environment.manager import EnvironmentManager
 
-logdir = 'log'
+# logdir = 'log'
+# env = EnvironmentManager.default()
+# env = stdenv()
+logdir = resolve('logdir')
 if not os.path.exists(logdir):
     os.mkdir(logdir)
 

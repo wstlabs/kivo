@@ -18,9 +18,10 @@ def squote(x):
     return "'%s'" % x
 
 
-def make_csv_args(c):
+def make_csv_args(c,slash=False):
     delimstr = '' if c == ',' else "DELIMETER %s, " % delim_term(c)
-    quoteterm = ", QUOTE %s" % squote('\\"')
+    quotechar = squote('\\"') if slash else squote('"')
+    quoteterm = ", QUOTE %s" % quotechar
     return '('+delimstr+'FORMAT CSV, HEADER TRUE'+quoteterm+')'
     # return '('+delimstr+'FORMAT CSV, HEADER TRUE)'
 
