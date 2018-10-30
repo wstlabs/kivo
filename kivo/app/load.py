@@ -64,8 +64,6 @@ def load_args(pgconf,stage,source,label='current'):
     print(f"statement = [{statement}]")
     command = make_psql_command(statement,pgconf)
     print(f"command = {command}")
-    # target=f"https://data.cityofnewyork.us/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
-    # command = ['curl','-o',destfile,target]
     outfile,errfile = logfiles(source,label)
     return command,outfile,errfile
 
