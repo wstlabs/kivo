@@ -54,6 +54,8 @@ def load_args(pgconf,stage,source,label='current'):
     infile = stage.fullpath(f"{label}/{source}.csv")
     log.info(f"infile = {infile}")
     print(f"infile = {infile}")
+    if not os.path.exists(infile):
+        raise ValueError(f"can't find infile '{infile}'")
     print(f"source = {source}")
     table = source2table(source)
     print(f"table = {table}")
