@@ -93,7 +93,7 @@ class Module(XDir):
         return self._package
 
     @property
-    def version(self,refresh=False):
+    def version(self):
         if self.package is not None:
             return self.package.get('version')
 
