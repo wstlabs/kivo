@@ -81,21 +81,25 @@ class XDir(object):
 
     def slurp_json(self,subpath,catch=True):
         path = self.fullpath(subpath)
+        if not self.exists(path):
+            raise ValueError(f"cannot find JSON file '{path}'")
         try:
             return ioany.slurp_json(path)
         except Exception as e:
             if catch:
-                raise RuntimeError(f"bad json file '{path}'")
+                raise RuntimeError(f"bad JSON file '{path}'")
             else:
                 raise e
 
     def slurp_csv(self,subpath,catch=True):
         path = self.fullpath(subpath)
+        if not self.exists(path):
+            raise ValueError(f"cannot find CSV file '{path}'")
         try:
             return ioany.slurp_csv(path)
         except Exception as e:
             if catch:
-                raise RuntimeError(f"bad csv file '{path}'")
+                raise RuntimeError(f"bad CSV file '{path}'")
             else:
                 raise e
 
