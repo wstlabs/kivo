@@ -40,7 +40,7 @@ class Module(XDir):
     @property
     def is_kosher(self):
         """
-        Tests wether module seems to have a coherent directory structure.
+        Returns true of the module seems to have a coherent directory structure.
         """
         if not self.is_active:
             return False
