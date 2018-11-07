@@ -28,7 +28,7 @@ class Module(XDir):
     def vivify(self):
         mkdir_from_base(self.parent.path,self.subpath)
 
-    def inspect(self):
+    def inspect_package(self):
         if self.exists('package.json'):
             package = self.slurp_json('package.json')
             if not isinstance(package,dict):
@@ -37,21 +37,22 @@ class Module(XDir):
         else:
             raise ValueError("bad module structure - no package.json")
 
+    def package(self,refresh=False):
+        if self._package is None or refresh:
+            self.inspect_package()
+        return self._package
+
+
     @property
     def is_kosher(self):
         """
-        Returns true of the module seems to have a coherent directory structure.
+        Returns true if the module seems to have a coherent directory structure.
         """
         if not self.is_active:
             return False
         if self.exists('package.json'):
             return True
         return False
-
-    def package(self,refresh=False):
-        if self._package is None or refresh:
-            self.inspect()
-        return self._package
 
     @property
     def version(self,refresh=False):
