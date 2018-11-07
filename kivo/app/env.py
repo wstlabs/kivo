@@ -15,8 +15,8 @@ def show_more(env):
     modroot = env.moduleroot
     print("more?")
     print("known modules ..")
-    head = ('modulename','is_active','is_kosher','version')
-    body = ((str(m),m.is_active,m.is_kosher,softver(m)) for m in modroot.modules())
+    head = ('name','version','is_active','is_kosher','firsterror')
+    body = ((str(m),m.version,m.is_active,m.is_kosher,m.firsterror) for m in modroot.modules())
     rows = [head] + list(body)
     print(tabulate(rows,headers="firstrow"))
 

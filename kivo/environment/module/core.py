@@ -75,15 +75,20 @@ class Module(XDir):
         return False
 
     @property
-    def lasterror(self):
+    def firsterror(self):
+        """
+        Returns the first error string (if any) from the most recent inspection attempt
+        (or None if the inspection was successful).
+        """
         top = _first(self._explain.keys())
         if len(top):
             k = top[0]
             return self._explain[k]
 
 def _first(iterable,depth=1):
+    """
+    A simple idiom to return the first :n items from an :iterable.  The iterable
+    is expected to have at least that many items (otherwise, it allows a a StopIteration
+    exception to bubble up).
+    """
     return list(islice(iterable,depth))
-    # buffer = []
-    # for _ in islice(iterable,depth):
-    #    buffer.append(_)
-    # return buffer
