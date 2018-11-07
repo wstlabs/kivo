@@ -13,6 +13,7 @@ class Module(XDir):
         self._package = None
         if autoviv:
             self.vivify()
+        self.inspect()
 
     def __str__(self):
         return f"Module('{self._name}')"
@@ -29,19 +30,29 @@ class Module(XDir):
         mkdir_from_base(self.parent.path,self.subpath)
 
     def inspect_package(self):
+        self._package = None
+        self._package_explain = None
         if self.exists('package.json'):
             package = self.slurp_json('package.json')
-            if not isinstance(package,dict):
-                raise ValueError("invalid package struct")
-            self._package = package
         else:
-            raise ValueError("bad module structure - no package.json")
+            self._package_explain = "cannot find package.json"
+            return False
+        if not isinstance(package,dict):
+            self._package_explain = "invalid package struct"
+            return False
+        return True
 
-    def package(self,refresh=False):
-        if self._package is None or refresh:
-            self.inspect_package()
+    def inspect(self):
+        self.inspect_package()
+
+    @property
+    def package(self):
         return self._package
 
+    @property
+    def version(self,refresh=False):
+        if self.package is not None:
+            return self.package.get('version')
 
     @property
     def is_kosher(self):
@@ -53,8 +64,4 @@ class Module(XDir):
         if self.exists('package.json'):
             return True
         return False
-
-    @property
-    def version(self,refresh=False):
-        return self.package(refresh).get('version')
 
