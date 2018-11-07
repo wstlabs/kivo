@@ -32,7 +32,15 @@ class Module(XDir):
     def vivify(self):
         mkdir_from_base(self.parent.path,self.subpath)
 
+
+    #
+    # Inspection interface
+    #
+
     def _disexplain(self,k):
+        """
+        Clears the explain status of the given tag from the internal _explain dict (if present).
+        """
         if k in self._explain:
             del self._explain[k]
 
@@ -55,15 +63,6 @@ class Module(XDir):
         self.inspect_package()
 
     @property
-    def package(self):
-        return self._package
-
-    @property
-    def version(self,refresh=False):
-        if self.package is not None:
-            return self.package.get('version')
-
-    @property
     def is_kosher(self):
         """
         Returns true if the module seems to have a coherent directory structure.
@@ -84,6 +83,22 @@ class Module(XDir):
         if len(top):
             k = top[0]
             return self._explain[k]
+
+    #
+    # Echo properties which (should have) emerged from our inspection operation.
+    #
+
+    @property
+    def package(self):
+        return self._package
+
+    @property
+    def version(self,refresh=False):
+        if self.package is not None:
+            return self.package.get('version')
+
+
+
 
 def _first(iterable,depth=1):
     """
