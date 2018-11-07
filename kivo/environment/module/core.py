@@ -1,4 +1,6 @@
 import os
+from collections import OrderedDict
+from itertools import islice
 from ...fcache import XDir
 from ...fcache.utils import is_valid_label
 from ...util.mkdir import mkdir_from_base
@@ -11,6 +13,7 @@ class Module(XDir):
         self.parent = parent
         self._name = name
         self._package = None
+        self._explain = OrderedDict()
         if autoviv:
             self.vivify()
         self.inspect()
@@ -29,20 +32,26 @@ class Module(XDir):
     def vivify(self):
         mkdir_from_base(self.parent.path,self.subpath)
 
+    def _disexplain(self,k):
+        if k in self._explain:
+            del self._explain[k]
+
     def inspect_package(self):
         self._package = None
-        self._package_explain = None
+        self._disexplain('package')
         if self.exists('package.json'):
             package = self.slurp_json('package.json')
         else:
-            self._package_explain = "cannot find package.json"
+            self._explain['package'] = "no package.json"
             return False
         if not isinstance(package,dict):
-            self._package_explain = "invalid package struct"
+            self._explain['package'] = "invalid package struct"
             return False
+        self._package = package
         return True
 
     def inspect(self):
+        self._explain = OrderedDict()
         self.inspect_package()
 
     @property
@@ -65,3 +74,16 @@ class Module(XDir):
             return True
         return False
 
+    @property
+    def lasterror(self):
+        top = _first(self._explain.keys())
+        if len(top):
+            k = top[0]
+            return self._explain[k]
+
+def _first(iterable,depth=1):
+    return list(islice(iterable,depth))
+    # buffer = []
+    # for _ in islice(iterable,depth):
+    #    buffer.append(_)
+    # return buffer
