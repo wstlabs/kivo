@@ -54,7 +54,7 @@ class Module(XDir):
         self._disexplain('package')
         subpath = 'package.json'
         if self.exists(subpath):
-            package = self.slurp_json(subpath)
+            package = self.load_json(subpath)
         else:
             self._explain['package'] = f'missing {subpath}'
             return False
@@ -69,7 +69,7 @@ class Module(XDir):
         self._disexplain('sources')
         subpath = 'config/sources.yaml'
         if self.exists(subpath):
-            sources = self.slurp_yaml(subpath)
+            sources = self.load_yaml(subpath)
         else:
             self._explain['sources'] = f'missing {subpath}'
             return False
