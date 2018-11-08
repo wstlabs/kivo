@@ -46,9 +46,7 @@ class Module(XDir):
             del self._explain[k]
 
     #
-    # The next two methods are (almost) exactly congruent.  But attempts made
-    # to generalize and combin them just seemed to make the code even weirder and 
-    # more brittle.  So it's seems better to commit an intentional DRY violation.
+    # The next 2 methods are nearly (but not quite) congruent. 
     #
 
     def inspect_package(self):
@@ -69,9 +67,9 @@ class Module(XDir):
     def inspect_sources(self):
         self._sources = None
         self._disexplain('sources')
-        subpath = 'config/sources.json'
+        subpath = 'config/sources.yaml'
         if self.exists(subpath):
-            sources = self.slurp_json(subpath)
+            sources = self.slurp_yaml(subpath)
         else:
             self._explain['sources'] = f'missing {subpath}'
             return False

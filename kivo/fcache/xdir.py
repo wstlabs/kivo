@@ -79,12 +79,28 @@ class XDir(object):
         path = self.fullpath(subpath)
         return os.path.islink(path)
 
+    #
+    # The next 3 methods are basically congruent (up to the slurp method).
+    #
+
     def slurp_json(self,subpath,catch=True):
         path = self.fullpath(subpath)
         if not self.exists(path):
             raise ValueError(f"cannot find JSON file '{path}'")
         try:
             return ioany.slurp_json(path)
+        except Exception as e:
+            if catch:
+                raise RuntimeError(f"bad JSON file '{path}'")
+            else:
+                raise e
+
+    def slurp_yaml(self,subpath,catch=True):
+        path = self.fullpath(subpath)
+        if not self.exists(path):
+            raise ValueError(f"cannot find YAML file '{path}'")
+        try:
+            return ioany.slurp_yaml(path)
         except Exception as e:
             if catch:
                 raise RuntimeError(f"bad JSON file '{path}'")
