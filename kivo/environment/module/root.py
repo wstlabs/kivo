@@ -32,11 +32,11 @@ class ModuleRoot(XDir):
 
     def modules(self):
         dirs = self.getdirs()
-        print(f"DIRS = {dirs}")
+        # print(f"DIRS = {dirs}")
         for name in self.getdirs():
             if not is_dashy(name):
                 continue
-            print(f"NAME = {name} ..")
+            # print(f"NAME = {name} ..")
             module = self.module(name)
             if module.is_active:
                 yield module

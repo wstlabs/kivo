@@ -19,6 +19,13 @@ def show_more(env):
     body = ((str(m),m.version,m.is_active,m.is_kosher,m.firsterror) for m in modroot.modules())
     rows = [head] + list(body)
     print(tabulate(rows,headers="firstrow"))
+    print("decent modules ..")
+    for m in modroot.modules():
+        if m.is_kosher:
+            print(f"name = {m.subpath}")
+            for k in m.sources():
+                config = m.source(k)
+                print(f"source = {k} => {config}")
 
 def main():
     args = parse_args()

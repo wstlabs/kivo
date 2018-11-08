@@ -90,13 +90,13 @@ class Module(XDir):
     @property
     def is_kosher(self):
         """
-        Returns true if the module seems to have a coherent directory structure.
+        Returns true if the module is active and has been fully initialized.
         """
         if not self.is_active:
             return False
-        if self.exists('package.json'):
-            return True
-        return False
+        return \
+           self._package is not None and \
+           self._sources is not None
 
     @property
     def firsterror(self):
@@ -122,6 +122,17 @@ class Module(XDir):
         if self.package is not None:
             return self.package.get('version')
 
+    def _assert_sources(self):
+        if self._sources is None:
+            raise RuntimeError("invalid usage - sources struct not initialized")
+
+    def sources(self):
+        self._assert_sources()
+        yield from self._sources.keys()
+
+    def source(self,name):
+        self._assert_sources()
+        return self._sources.get(name)
 
 
 
