@@ -13,6 +13,7 @@ class Module(XDir):
         self.parent = parent
         self._name = name
         self._package = None
+        self._sources = None
         self._explain = OrderedDict()
         if autoviv:
             self.vivify()
@@ -44,13 +45,20 @@ class Module(XDir):
         if k in self._explain:
             del self._explain[k]
 
+    #
+    # The next two methods are (almost) exactly congruent.  But attempts made
+    # to generalize and combin them just seemed to make the code even weirder and 
+    # more brittle.  So it's seems better to commit an intentional DRY violation.
+    #
+
     def inspect_package(self):
         self._package = None
         self._disexplain('package')
-        if self.exists('package.json'):
-            package = self.slurp_json('package.json')
+        subpath = 'package.json'
+        if self.exists(subpath):
+            package = self.slurp_json(subpath)
         else:
-            self._explain['package'] = "no package.json"
+            self._explain['package'] = f'missing {subpath}'
             return False
         if not isinstance(package,dict):
             self._explain['package'] = "invalid package struct"
@@ -58,9 +66,28 @@ class Module(XDir):
         self._package = package
         return True
 
+    def inspect_sources(self):
+        self._sources = None
+        self._disexplain('sources')
+        subpath = 'config/sources.json'
+        if self.exists(subpath):
+            sources = self.slurp_json(subpath)
+        else:
+            self._explain['sources'] = f'missing {subpath}'
+            return False
+        if not isinstance(sources,dict):
+            self._explain['sources'] = "invalid sources struct"
+            return False
+        self._sources = sources
+        return True
+
+
     def inspect(self):
         self._explain = OrderedDict()
         self.inspect_package()
+        self.inspect_sources()
+        return len(self._explain) == 0
+
 
     @property
     def is_kosher(self):
