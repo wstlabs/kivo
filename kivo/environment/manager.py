@@ -3,6 +3,7 @@ from copy import deepcopy
 from .stage import Stage
 from .journal import Journal
 from .module.root import ModuleRoot
+from .module.index import ModuleIndex
 from ..config import resolve
 
 _env = None
@@ -22,9 +23,9 @@ class EnvironmentManager(object):
 
     def build(self,**kwargs):
         self._options = {}
-        # self._home = getenv_strict('DWXROOT')
         self._home = resolve('home')
         self.moduleroot = ModuleRoot()
+        self.moduleindex = ModuleIndex(self.moduleroot)
         self.journal = Journal()
         self.stage   = Stage()
 
@@ -44,6 +45,7 @@ class EnvironmentManager(object):
     def members(self):
         yield ('home',self.home)
         yield ('moduleroot',self.moduleroot)
+        yield ('moduleindex',self.moduleindex)
         yield ('journal',self.journal)
         yield ('stage',self.stage)
         yield ('logdir',self.logdir)
