@@ -40,3 +40,4 @@ class ModuleRoot(XDir):
             module = self.module(name)
             if module.is_active:
                 yield module
+
