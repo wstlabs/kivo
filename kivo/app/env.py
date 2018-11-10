@@ -15,17 +15,23 @@ def show_more(env):
     modroot = env.moduleroot
     print("more?")
     print("known modules ..")
-    head = ('name','version','is_active','is_kosher','firsterror')
-    body = ((str(m),m.version,m.is_active,m.is_kosher,m.firsterror) for m in modroot.modules())
+    head = ('name','version','active','kosher','sourced','firsterror')
+    body = ((m.name,m.version,m.is_active,m.is_kosher,m.is_sourced,m.firsterror) for m in modroot.modules())
     rows = [head] + list(body)
     print(tabulate(rows,headers="firstrow"))
     print("decent modules ..")
     for m in modroot.modules():
         if m.is_kosher:
             print(f"name = {m.subpath}")
+            if not m.is_sourced:
+                continue
             for k in m.sources():
                 config = m.source(k)
                 print(f"source = {k} => {config}")
+
+def build_index(modroot):
+    print("build ..")
+    print("built.")
 
 def main():
     args = parse_args()
@@ -39,6 +45,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-import argparse
 

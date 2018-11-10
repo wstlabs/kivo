@@ -94,9 +94,11 @@ class Module(XDir):
         """
         if not self.is_active:
             return False
-        return \
-           self._package is not None and \
-           self._sources is not None
+        return self._package is not None
+
+    @property
+    def is_sourced(self):
+        return self.is_kosher and self._sources is not None
 
     @property
     def firsterror(self):
