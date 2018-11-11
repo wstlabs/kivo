@@ -9,6 +9,7 @@ class ModuleIndex():
         self._info = OrderedDict()
         self._miss = OrderedDict()
         self._done = False
+        self.build()
 
     def __str__(self):
         return f"ModuleIndex({self.parent.path})"
@@ -17,7 +18,7 @@ class ModuleIndex():
         if not isinstance(info,dict):
             raise ValueError("invalid info struct")
         assert_source_name(name)
-        print(f"ADD name = {name} ..")
+        # print(f"ADD name = {name} ..")
         if name in self._info:
             raise RuntimeError("conflict resolution not yet permitted")
         self._info[name] = info
@@ -29,7 +30,7 @@ class ModuleIndex():
         if self._done:
             raise RuntimeError("invalid usage - already built")
         for module,sourcename in self.parent.sourcepairs():
-            print(f"MODULE = {module}, sourcename = {sourcename}")
+            # print(f"MODULE = {module}, sourcename = {sourcename}")
             info = module.source(sourcename)
             if info is None:
                 raise ValueError(f"bad lookup on sourcename = '{sourcename}'")

@@ -47,7 +47,7 @@ def main():
     print(tabulate(env.members()))
     if args.more:
         show_root(env)
-    build_index(env)
+    # build_index(env)
     if args.more:
         show_index(env)
     print("all done.")
