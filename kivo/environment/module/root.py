@@ -41,3 +41,10 @@ class ModuleRoot(XDir):
             if module.is_active:
                 yield module
 
+    def sourcepairs(self):
+        for module in self.modules():
+            if module.is_sourced:
+                for sourcename in module.sources():
+                    yield module,sourcename
+
+

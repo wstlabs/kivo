@@ -23,6 +23,10 @@ class Module(XDir):
         return f"Module('{self._name}')"
 
     @property
+    def name(self):
+        return self._name
+
+    @property
     def subpath(self):
         return self._name
 

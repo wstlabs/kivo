@@ -11,7 +11,7 @@ def parse_args():
 def softver(module):
     return module.version if module.is_kosher else None
 
-def show_more(env):
+def show_root(env):
     modroot = env.moduleroot
     print("more?")
     print("known modules ..")
@@ -29,8 +29,15 @@ def show_more(env):
                 config = m.source(k)
                 print(f"source = {k} => {config}")
 
-def build_index(modroot):
+def show_index(env):
+    index = env.moduleindex
+    for name in index.sources():
+        info = index.get(name)
+        print(f"source = {name} => {info}")
+
+def build_index(env):
     print("build ..")
+    env.moduleindex.build()
     print("built.")
 
 def main():
@@ -39,7 +46,10 @@ def main():
     print(env)
     print(tabulate(env.members()))
     if args.more:
-        show_more(env)
+        show_root(env)
+    build_index(env)
+    if args.more:
+        show_index(env)
     print("all done.")
 
 if __name__ == '__main__':
