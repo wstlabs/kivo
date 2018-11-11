@@ -48,20 +48,3 @@ class Stage(XDir):
         return issue
 
 
-"""
-    def trunks(self):
-        for family in valid_families():
-            for source in self.sources(family):
-                yield Trunk(self,family,source)
-
-    def dive(self):
-        for source in self.sources():
-            yield source
-
-    def locate(self,source):
-        assert is_valid_source(source)
-        for trunk in self.trunks():
-            if trunk.source == source:
-                yield trunk
-"""
-

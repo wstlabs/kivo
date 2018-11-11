@@ -17,10 +17,10 @@ class Phase(XDir):
             self.vivify()
 
     def __str__(self):
-        family = self.parent.family
+        tempo  = self.parent.tempo
         source = self.parent.source
         label  = self.label
-        return f"Phase('{family}','{source}','{label}')"
+        return f"Phase('{tempo}','{source}','{label}')"
 
     def index(self):
         return label2index(self.label)

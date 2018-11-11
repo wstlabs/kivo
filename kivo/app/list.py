@@ -15,10 +15,10 @@ def parse_args():
     parser.add_argument("--dry", action="store_true")
     args = parser.parse_args()
     if args.month is not None:
-        args.family = 'monthly'
+        args.tempo = 'monthly'
         args.version = args.month
     if args.year is not None:
-        args.family = 'yearly'
+        args.tempo = 'yearly'
         args.version = args.year
     return args
 

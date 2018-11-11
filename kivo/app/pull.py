@@ -25,10 +25,10 @@ def parse_args():
     parser.add_argument("--dry", action="store_true")
     args = parser.parse_args()
     if args.month is not None:
-        args.family = 'monthly'
+        args.tempo = 'monthly'
         args.version = args.month
     if args.year is not None:
-        args.family = 'yearly'
+        args.tempo = 'yearly'
         args.version = args.year
     return args
 
@@ -41,17 +41,27 @@ def logfiles(source,version):
     errfile=f"{LOGDIR}/out--{logbase}.txt"
     return outfile,errfile
 
-def curlargs(journal,slug,source,family,version):
-    phase = journal.trunk(family,source).phase(label='incoming',autoviv=True)
+# target=f"https://data.cityofnewyork.us/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
+def resolve(tempo,slug):
+    log.info(f"tempo = {tempo}, slug = {slug}")
+    if tempo == 'socrata-newyork':
+        return f"https://data.cityofnewyork.us/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
+    if tempo == 'socrata-chicago':
+        return f"https://data.cityofchicago.org/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
+    raise ValueError(f"unknown tempo '{tempo}'")
+
+def curlargs(journal,slug,source,tempo,version):
+    log.info(f"source = {source}, slug = {slug}")
+    phase = journal.trunk(tempo,source).phase(label='incoming',autoviv=True)
     destfile = phase.fullpath(f"{version}.csv")
     log.info(f"destfile = {destfile}")
-    target=f"https://data.cityofnewyork.us/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
+    target = resolve(tempo,slug)
     command = ['curl','-o',destfile,target]
     outfile,errfile = logfiles(source,version)
     return command,outfile,errfile
 
-def docurl(journal,slug,source,family,version):
-    command,outfile,errfile = curlargs(journal,slug,source,family,version)
+def docurl(journal,slug,source,tempo,version):
+    command,outfile,errfile = curlargs(journal,slug,source,tempo,version)
     log.info(f'command = {command}')
     subprocess.Popen(
         ['nohup','time'] + command,
@@ -72,11 +82,16 @@ def main():
     source = args.source
     version = args.version
     env = EnvironmentManager()
-    cfg = loadcfg("config/socrata.csv")
-    slug = cfg[source]['slug']
-    family = 'monthly'
-    log.info(f"source = {source}, family = {family}, version = {version}")
-    docurl(env.journal,slug,source,family,version)
+    print("env = ",env)
+    for line in env.members():
+        print(line)
+    # cfg = loadcfg("config/socrata.csv")
+    # slug = cfg[source]['slug']
+    info = env.moduleindex.get(source)
+    print(f"info = {info}")
+    tempo = 'monthly'
+    log.info(f"source = {source}, tempo = {tempo}, version = {version}")
+    docurl(env.journal,slug,source,tempo,version)
     log.info("all done")
 
 

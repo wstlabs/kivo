@@ -1,7 +1,7 @@
 import os
 from .trunk import Trunk
 from ...fcache.xdir import XDir
-from ...fcache.utils import valid_families, is_dashy, is_valid_family, is_valid_source
+from ...fcache.utils import valid_tempos, is_dashy, is_valid_tempo, is_valid_source
 
 ROOTDIR = '/opt/journal'
 
@@ -21,30 +21,30 @@ class Journal(XDir):
     def __str__(self):
         return f"Journal({self.path})"
 
-    def famdir(self,family):
-        assert is_valid_family(family)
-        return os.path.join(self.path,family)
+    def temporoot(self,tempo):
+        assert is_valid_tempo(tempo)
+        return os.path.join(self.path,tempo)
 
-    def sources(self,family):
-        famdir = self.famdir(family)
-        if os.path.isdir(famdir):
-            for name in os.listdir(famdir):
+    def sources(self,tempo):
+        temporoot = self.temporoot(tempo)
+        if os.path.isdir(temporoot):
+            for name in os.listdir(temporoot):
                 if is_dashy(name):
                     yield name
         else:
             yield from []
 
-    def trunk(self,family=None,source=None):
-        if family is None:
-            raise ValueError("need a family name")
+    def trunk(self,tempo=None,source=None):
+        if tempo is None:
+            raise ValueError("need a tempo name")
         if source is None:
             raise ValueError("need a source name")
-        return Trunk(self,family,source)
+        return Trunk(self,tempo,source)
 
     def trunks(self):
-        for family in valid_families():
-            for source in self.sources(family):
-                yield Trunk(self,family,source)
+        for tempo in valid_tempos():
+            for source in self.sources(tempo):
+                yield Trunk(self,tempo,source)
 
     def dive(self):
         for source in self.sources():

@@ -27,8 +27,8 @@ def logfiles(source,version):
     errfile=f"{LOGDIR}/out--{logbase}.txt"
     return outfile,errfile
 
-def curlargs(journal,slug,source,family,version):
-    phase = journal.trunk(family,source).phase(label='incoming',autoviv=True)
+def curlargs(journal,slug,source,tempo,version):
+    phase = journal.trunk(tempo,source).phase(label='incoming',autoviv=True)
     destfile = phase.fullpath(f"{version}.csv")
     log.info(f"destfile = {destfile}")
     target=f"https://data.cityofnewyork.us/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
@@ -36,8 +36,8 @@ def curlargs(journal,slug,source,family,version):
     outfile,errfile = logfiles(source,version)
     return command,outfile,errfile
 
-def docurl(journal,slug,source,family,version):
-    command,outfile,errfile = curlargs(journal,slug,source,family,version)
+def docurl(journal,slug,source,tempo,version):
+    command,outfile,errfile = curlargs(journal,slug,source,tempo,version)
     log.info(f'command = {command}')
     subprocess.Popen(
         ['nohup','time'] + command,
@@ -59,10 +59,10 @@ def main():
     version = args.version
     cfg = loadcfg("config/socrata.csv")
     slug = cfg[source]['slug']
-    family = 'monthly'
-    log.info(f"source = {source}, family = {family}, version = {version}")
+    tempo = 'monthly'
+    log.info(f"source = {source}, tempo = {tempo}, version = {version}")
     journal = kivo.fcache.journal.instance()
-    docurl(journal,slug,source,family,version)
+    docurl(journal,slug,source,tempo,version)
     log.info("all done")
 
 

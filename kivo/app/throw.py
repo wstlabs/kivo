@@ -23,17 +23,17 @@ def derive(srcobj,source):
     return f"{source}{ext}"
 
 
-RStat = namedtuple('RStat',['family','source','label','version','found','srcpath','dstpath'])
+RStat = namedtuple('RStat',['tempo','source','label','version','found','srcpath','dstpath'])
 def resolve(journal,issue,inrecs):
     for r in inrecs:
-        family = None
+        tempo = None
         source,version,label = r['source'],r['version'],r['phase']
         # print(f"source = {source}, version = {version}, phase = {label}")
         trunk = journal.locate_distinct(source)
         # print(f"trunk = {trunk}")
         found,srcpath,dstpath = False,None,None
         if trunk:
-            family = trunk.family
+            tempo = trunk.tempo
             phase = trunk.phase(label=label)
             # print(f"phase = {phase}")
             if phase.is_active:
@@ -48,7 +48,7 @@ def resolve(journal,issue,inrecs):
                     dstpath = issue.fullpath(dstobj)
                     # print(f"dstpath = {dstpath}")
         yield RStat(
-            family=family,
+            tempo=tempo,
             source=source,
             label=label,
             version=version,
