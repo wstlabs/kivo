@@ -1,3 +1,4 @@
+import re
 import os
 import argparse
 import subprocess
@@ -34,7 +35,7 @@ def parse_args():
 
 def logfiles(source,version):
     pid = os.getpid()
-    logbase=f"{source}--{version}--{pid}"
+    logbase=f"{source.name}--{version}--{pid}"
     if not os.path.exists(LOGDIR):
         os.mkdir(LOGDIR)
     outfile=f"{LOGDIR}/err--{logbase}.txt"
@@ -42,15 +43,84 @@ def logfiles(source,version):
     return outfile,errfile
 
 # target=f"https://data.cityofnewyork.us/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
-def resolve(tempo,slug):
-    log.info(f"tempo = {tempo}, slug = {slug}")
-    if tempo == 'socrata-newyork':
+def resolve(family,options):
+    log.info(f"family = {family}, options = {options}")
+    print(f"family = {family}, options = {options}")
+    slug = options['slug']
+    if family == 'socrata-newyork':
         return f"https://data.cityofnewyork.us/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
-    if tempo == 'socrata-chicago':
+    if family == 'socrata-chicago':
         return f"https://data.cityofchicago.org/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
-    raise ValueError(f"unknown tempo '{tempo}'")
+    if family == 'socrata-cookcounty':
+        return f"https://datacatalog.cookcountyil.gov/api/views/{slug}/rows.csv?accessType=DOWNLOAD"
+    raise ValueError(f"unknown source family '{family}'")
 
-def curlargs(journal,slug,source,tempo,version):
+_slugpag = re.compile('^\w{4}-\w{4}$')
+def is_valid_slug(slug):
+    if not isinstance(slug,str):
+        return False
+    return _slugpat.match(slug)
+
+def curlargs(journal,source,version):
+    log.info(f"source = {source}, version = {version}")
+    print(f'origin = {source.origin}')
+    tempo = source.origin['tempo']
+    phase = journal.trunk(tempo,source.name).phase(label='incoming',autoviv=True)
+    destfile = phase.fullpath(f"{version}.csv")
+    log.info(f"destfile = {destfile}")
+    origin = source.origin
+    target = resolve(origin['family'],origin['options'])
+    log.info(f"target = {target}")
+    command = ['curl','-o',destfile,target]
+    outfile,errfile = logfiles(source,version)
+    return command,outfile,errfile
+
+def docurl(journal,source,version,dryrun=False):
+    command,outfile,errfile = curlargs(journal,source,version)
+    log.info(f'command = {command}')
+    if dryrun:
+        print('dryrun, aborting')
+        return
+    subprocess.Popen(
+        ['nohup','time'] + command,
+        stdout=open(outfile,'w'),
+        stderr=open(errfile,'w'),
+        preexec_fn=os.setpgrp)
+
+def dopull(env,name,version):
+    source = env.moduleindex.get(name)
+    print(f"source = {source}")
+    if source is None:
+        raise ValueError(f"invalid sourcename '{name}'")
+    docurl(env.journal,source,version,dryrun=False)
+
+def main():
+    args = parse_args()
+    name = args.source
+    version = args.version
+    env = EnvironmentManager()
+    print(env.dump())
+    dopull(env,name,version)
+    print("all done")
+
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+"""
+def loadcfg(path):
+    d = OrderedDict()
+    inrecs = ioany.read_recs(path)
+    for r in inrecs:
+        slug,name = r['slug'],r['name']
+        d[name] = {'slug':slug}
+    return d
+"""
+
+def __curlargs(journal,slug,source,tempo,version):
     log.info(f"source = {source}, slug = {slug}")
     phase = journal.trunk(tempo,source).phase(label='incoming',autoviv=True)
     destfile = phase.fullpath(f"{version}.csv")
@@ -60,7 +130,7 @@ def curlargs(journal,slug,source,tempo,version):
     outfile,errfile = logfiles(source,version)
     return command,outfile,errfile
 
-def docurl(journal,slug,source,tempo,version):
+def __docurl(journal,slug,source,tempo,version):
     command,outfile,errfile = curlargs(journal,slug,source,tempo,version)
     log.info(f'command = {command}')
     subprocess.Popen(
@@ -68,33 +138,4 @@ def docurl(journal,slug,source,tempo,version):
         stdout=open(outfile,'w'),
         stderr=open(errfile,'w'),
         preexec_fn=os.setpgrp)
-
-def loadcfg(path):
-    d = OrderedDict()
-    inrecs = ioany.read_recs(path)
-    for r in inrecs:
-        slug,name = r['slug'],r['name']
-        d[name] = {'slug':slug}
-    return d
-
-def main():
-    args = parse_args()
-    source = args.source
-    version = args.version
-    env = EnvironmentManager()
-    print("env = ",env)
-    for line in env.members():
-        print(line)
-    # cfg = loadcfg("config/socrata.csv")
-    # slug = cfg[source]['slug']
-    info = env.moduleindex.get(source)
-    print(f"info = {info}")
-    tempo = 'monthly'
-    log.info(f"source = {source}, tempo = {tempo}, version = {version}")
-    docurl(env.journal,slug,source,tempo,version)
-    log.info("all done")
-
-
-if __name__ == '__main__':
-    main()
 

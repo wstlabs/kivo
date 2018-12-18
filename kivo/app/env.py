@@ -26,14 +26,15 @@ def show_root(env):
             if not m.is_sourced:
                 continue
             for k in m.sources():
-                config = m.source(k)
-                print(f"source = {k} => {config}")
+                source = m.source(k)
+                print(f"source = {k} => {source}")
 
 def show_index(env):
     index = env.moduleindex
     for name in index.sources():
-        info = index.get(name)
-        print(f"source = {name} => {info}")
+        source = index.get(name)
+        d = source.as_dict()
+        print(f"source = {name} => {d}")
 
 def build_index(env):
     print("build ..")

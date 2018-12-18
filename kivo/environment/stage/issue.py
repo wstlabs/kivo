@@ -1,6 +1,6 @@
 import os
 from ...fcache import XDir
-from ...fcache.utils import is_valid_label
+from ...fcache.utils import is_dashy, is_ext
 from ...util.mkdir import mkdir_from_base
 
 class Issue(XDir):
@@ -26,3 +26,12 @@ class Issue(XDir):
 
     def vivify(self):
         mkdir_from_base(self.parent.path,self.subpath)
+
+    def srcpath(self,source,ext):
+        assert is_dashy(source)
+        assert is_ext(ext)
+        return f"{source}.{ext}"
+
+    def presents(self,source,ext):
+        subpath = self.srcpath(source,ext)
+        return self.exists(subpath)

@@ -1,6 +1,7 @@
 import os
 from collections import OrderedDict
 from .core import Module
+from ..source.core import Source
 
 class ModuleIndex():
 
@@ -24,7 +25,9 @@ class ModuleIndex():
         self._info[name] = info
 
     def get(self,name):
-        return self._info.get(name)
+        # return self._info.get(name)
+        info = self._info.get(name)
+        return Source(name,info) if info is not None else None
 
     def build(self):
         if self._done:

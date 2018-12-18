@@ -65,3 +65,16 @@ class Journal(XDir):
             return trunks[0]
         raise RuntimeError(f"multiple trunks for source = '{source}'")
 
+    def discover(self,sourcename,version):
+        assert is_dashy(sourcename)
+        assert is_dashy(version)
+        trunk = self.locate_distinct(sourcename)
+        if trunk is None:
+            return None,None,"trunk not found"
+        latest,target = None,None
+        for phase in trunk.phases():
+            subpath = phase.locate_distinct(version)
+            if subpath is not None:
+                latest,target = phase,subpath
+        return latest,target,None
+

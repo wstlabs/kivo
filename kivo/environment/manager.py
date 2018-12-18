@@ -1,5 +1,6 @@
 import os
 from copy import deepcopy
+from tabulate import tabulate
 from .stage import Stage
 from .journal import Journal
 from .module.root import ModuleRoot
@@ -50,4 +51,5 @@ class EnvironmentManager(object):
         yield ('stage',self.stage)
         yield ('logdir',self.logdir)
 
-
+    def dump(self):
+        return tabulate(self.members())

@@ -103,7 +103,7 @@ class XDir(object):
             return ioany.load_yaml(path)
         except Exception as e:
             if catch:
-                raise RuntimeError(f"bad JSON file '{path}'")
+                raise RuntimeError(f"bad YAML file '{path}'")
             else:
                 raise e
 

@@ -1,7 +1,7 @@
 import os
 from .issue import Issue
 from ...fcache.xdir import XDir
-from ...fcache.utils import is_dashy
+from ...fcache.utils import is_dashy, is_ext
 
 ROOTDIR = '/opt/stage'
 
@@ -47,4 +47,19 @@ class Stage(XDir):
                 issue.vivify()
         return issue
 
+    def issues(self):
+        dirpath,subdirs,files = next(self.walk())
+        for tag in subdirs:
+            yield Issue(self,tag)
+
+    def locate(self,source,ext='csv'):
+        assert is_dashy(source)
+        assert is_ext(ext)
+        for issue in self.issues():
+            if issue.presents(source,ext):
+                yield issue
+
+    def presents(self,issuetag,source,ext):
+        issue = self.issue(issuetag)
+        return None if issue is None else issue.presents(source,ext)
 

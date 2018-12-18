@@ -48,4 +48,7 @@ class Trunk(XDir):
             if os.path.isdir(phase.path):
                 yield phase
 
+    def latest(self,source,version):
+        for phase in self.phases():
+            pass
 
