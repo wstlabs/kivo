@@ -1,5 +1,5 @@
 from .manager import EnvironmentManager
 
-def standard():
-    return None
+def default_manager():
+    return EnvironmentManager.default()
 

@@ -1,8 +1,9 @@
 import sys
 import argparse
 import kivo
+from .environment import default_manager
 from .logging import log
-from .command import resolve
+from .app import resolve
 from .util.io import slurp_json
 from .util.argparse import splitargv
 from .decorators import timedsingle
@@ -32,7 +33,7 @@ def init_app_root(approot=None):
 def configure():
     log.debug('..')
     init_app_root();
-    kivo.module.setup()
+    # kivo.module.setup()
     kivo.pgconf = slurp_json("config/postgres.json")
 
 USAGE = """etl command [arguments] [<keyword-arguments>]"""
@@ -53,12 +54,20 @@ def parse_args():
     options = parse_options(kwargv)
     return command,posargs,options
 
+def handle_error(s):
+    """
+    A shim to treat error messages properly.
+    """
+    s = "--unknown-error-condition--" if s is None else s
+    log.error(s)
+    print(f"ERROR:  {s}")
+
 @timedsingle
 def dispatch(command,posargs,options=None):
     log.debug("command='%s', posargs=%s, options=%s" % (command,posargs,options))
     log.info("%s %s .." % (command,posargs))
     if command is None:
-        log.error("no command argument")
+        handle_error("no command argument")
         return False
     handler = resolve(command)
     if handler:
@@ -67,7 +76,7 @@ def dispatch(command,posargs,options=None):
         except (ValueError, RuntimeError) as e:
             if TRACE:
                 log.exception(e)
-            log.error(str(e))
+            handle_error(str(e))
             return False
     else:
         log.error("unrecognized command '%s'" % command)
