@@ -1,4 +1,0 @@
-
-time curl -sS -o /opt/stage/1-incoming/doitt-building-current.csv \
-    'https://data.cityofnewyork.us/api/views/n8sc-gmyy/rows.csv?accessType=DOWNLOAD' > out-doitt.txt >& err-doitt.txt
-
